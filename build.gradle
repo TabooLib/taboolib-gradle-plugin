@@ -1,0 +1,48 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.12.0'
+}
+
+group 'io.izzel.taboolib'
+version '1.0'
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+}
+
+repositories {
+    maven { url "http://ptms.ink:8081/repository/maven-releases/" }
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy:2.5.13'
+    compile gradleApi()
+    compile localGroovy()
+    embed 'org.ow2.asm:asm:8.0.1'
+    embed 'org.ow2.asm:asm-commons:8.0.1'
+    embed 'io.izzel.taboolib:TabooLibLoader:2.+:all'
+}
+
+jar {
+    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) })
+}
+
+pluginBundle {
+    website = 'https://github.com/TabooLib/taboolib-gradle-plugin'
+    vcsUrl = 'https://github.com/TabooLib/taboolib-gradle-plugin'
+    tags = ['taboolib', 'bukkit', 'minecraft']
+}
+
+gradlePlugin {
+    plugins {
+        taboolib {
+            id = 'io.izzel.taboolib'
+            displayName = 'TabooLib Gradle Plugin'
+            description = 'TabooLib Gradle Plugin'
+            implementationClass = 'io.izzel.taboolib.gradle.TabooLibPlugin'
+        }
+    }
+}
