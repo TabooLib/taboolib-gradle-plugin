@@ -12,11 +12,10 @@ class TabooLibPlugin implements Plugin<Project> {
         project.repositories.maven { url "http://repo.ptms.ink/repository/maven-releases/" }
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         def taboo = project.configurations.maybeCreate('taboo')
-        project.configurations.compileClasspath.extendsFrom(taboo)
         def tabooTask = project.tasks.create('tabooRelocateJar', RelocateJar)
 
         project.afterEvaluate {
-            println(project.group.toString())
+            project.configurations.compileClasspath.extendsFrom(taboo)
             project.configurations.compileClasspath.dependencies.add(project.dependencies.create("io.izzel.taboolib:TabooLib:${tabooExt.tabooLibVersion}:all"))
             taboo.dependencies.add(project.dependencies.create("io.izzel.taboolib:TabooLibLoader:${tabooExt.loaderVersion}:all"))
 
