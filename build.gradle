@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'io.izzel.taboolib'
-version '1.0'
+version '1.1'
 
 configurations {
     embed
@@ -13,7 +13,6 @@ configurations {
 }
 
 repositories {
-    maven { url "http://ptms.ink:8081/repository/maven-releases/" }
     mavenCentral()
 }
 
@@ -23,7 +22,6 @@ dependencies {
     compile localGroovy()
     embed 'org.ow2.asm:asm:8.0.1'
     embed 'org.ow2.asm:asm-commons:8.0.1'
-    embed 'io.izzel.taboolib:TabooLibLoader:2.+:all'
 }
 
 jar {
