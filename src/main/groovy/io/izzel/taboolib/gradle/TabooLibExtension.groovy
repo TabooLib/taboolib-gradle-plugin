@@ -11,6 +11,8 @@ class TabooLibExtension {
 
     String classifier = 'all'
 
+    boolean builtin = true
+
     Map<String, String> relocation = new LinkedHashMap<>()
 
     def relocate(String pre, String post) {

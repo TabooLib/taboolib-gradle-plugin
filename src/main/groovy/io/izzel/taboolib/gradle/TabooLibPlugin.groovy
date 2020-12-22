@@ -17,7 +17,9 @@ class TabooLibPlugin implements Plugin<Project> {
         project.afterEvaluate {
             project.configurations.compileClasspath.extendsFrom(taboo)
             project.configurations.compileClasspath.dependencies.add(project.dependencies.create("io.izzel.taboolib:TabooLib:${tabooExt.tabooLibVersion}:all"))
-            taboo.dependencies.add(project.dependencies.create("io.izzel.taboolib:TabooLibLoader:${tabooExt.loaderVersion}:all"))
+            if (tabooExt.builtin) {
+                taboo.dependencies.add(project.dependencies.create("io.izzel.taboolib:TabooLibLoader:${tabooExt.loaderVersion}:all"))
+            }
 
             def shadowPresent = project.plugins.hasPlugin('com.github.johnrengelman.shadow')
             if (!shadowPresent) {
