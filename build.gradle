@@ -17,9 +17,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy:2.5.13'
-    compile gradleApi()
-    compile localGroovy()
+    implementation 'org.codehaus.groovy:groovy:2.5.13'
+    implementation gradleApi()
+    implementation localGroovy()
     embed 'org.ow2.asm:asm:8.0.1'
     embed 'org.ow2.asm:asm-commons:8.0.1'
 }

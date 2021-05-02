@@ -8,8 +8,14 @@ class TabooLibPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.repositories.maven { url "http://repo.ptms.ink/repository/codemc-nms/" }
-        project.repositories.maven { url "http://repo.ptms.ink/repository/maven-releases/" }
+        project.repositories.maven {
+            url "http://repo.ptms.ink/repository/codemc-nms/"
+            allowInsecureProtocol = true
+        }
+        project.repositories.maven {
+            url "http://repo.ptms.ink/repository/maven-releases/"
+            allowInsecureProtocol = true
+        }
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         def taboo = project.configurations.maybeCreate('taboo')
         def tabooTask = project.tasks.create('tabooRelocateJar', RelocateJar)
