@@ -8,8 +8,9 @@ class SpongeAnnotationVisitor extends AnnotationVisitor {
 
     Project project
 
-    SpongeAnnotationVisitor(AnnotationVisitor annotationVisitor) {
-        super(Opcodes.ASM5, annotationVisitor)
+    SpongeAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
+        super(Opcodes.ASM7, annotationVisitor)
+        this.project = project
     }
 
     @Override

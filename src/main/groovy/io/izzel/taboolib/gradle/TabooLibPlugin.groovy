@@ -8,17 +8,16 @@ class TabooLibPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.repositories.maven { url URI("https://repo2s.ptms.ink/repository/maven-releases/") }
+        project.repositories.maven { url project.uri("https://repo2s.ptms.ink/repository/maven-releases/") }
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         def taboo = project.configurations.maybeCreate('taboo')
         def tabooTask = project.tasks.create('tabooRelocateJar', RelocateJar)
-        tabooTask.project = project
 
         project.afterEvaluate {
             project.configurations.compileClasspath.extendsFrom(taboo)
             // subprojects
             tabooExt.modules.each {
-                project.configurations.compileClasspath.dependencies.add(project.dependencies.create("io.izzel:taboolib:${tabooExt.version}:${it}"))
+                project.configurations.taboo.dependencies.add(project.dependencies.create("io.izzel:taboolib:${tabooExt.version}:${it}"))
             }
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
@@ -26,6 +25,7 @@ class TabooLibPlugin implements Plugin<Project> {
             }
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { RelocateJar task ->
+                task.project = project
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier

@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.izzel.taboolib'
-version '1.4'
+version '1.5'
 
 configurations {
     embed
@@ -42,6 +42,14 @@ gradlePlugin {
             displayName = 'TabooLib Gradle Plugin'
             description = 'TabooLib Gradle Plugin'
             implementationClass = 'io.izzel.taboolib.gradle.TabooLibPlugin'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url = file("/Users/sky/Desktop/repo")
         }
     }
 }

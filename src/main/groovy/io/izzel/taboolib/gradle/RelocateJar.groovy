@@ -2,6 +2,7 @@ package io.izzel.taboolib.gradle
 
 import groovy.transform.ToString
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Optional
@@ -29,6 +30,9 @@ class RelocateJar extends DefaultTask {
     @Input
     String classifier
 
+    @Input
+    Project project
+
     @TaskAction
     def relocate() {
         def mapping = relocations.collectEntries { [(it.key.replace('.', '/')), it.value.replace('.', '/')] }
@@ -48,7 +52,7 @@ class RelocateJar extends DefaultTask {
                             project.logger.info("Relocating " + jarEntry.name)
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
-                            def visitor = new TabooLibClassVisitor(writer)
+                            def visitor = new TabooLibClassVisitor(writer, project)
                             reader.accept(new ClassRemapper(visitor, remapper), 0)
                             out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
                             out.write(writer.toByteArray())
