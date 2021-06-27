@@ -11,7 +11,6 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.commons.ClassRemapper
 
 import java.nio.file.Files
-import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -49,7 +48,8 @@ class RelocateJar extends DefaultTask {
                             project.logger.info("Relocating " + jarEntry.name)
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
-                            reader.accept(new ClassRemapper(writer, remapper), 0)
+                            def visitor = new TabooLibClassVisitor(writer)
+                            reader.accept(new ClassRemapper(visitor, remapper), 0)
                             out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
                             out.write(writer.toByteArray())
                         } else {

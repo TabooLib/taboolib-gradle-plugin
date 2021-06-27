@@ -5,17 +5,19 @@ import groovy.transform.Canonical
 @Canonical
 class TabooLibExtension {
 
-    String tabooLibVersion = '5.+'
+    String version = '6.0.0'
 
-    String loaderVersion = '2.+'
+    String classifier = "all"
 
-    String classifier = 'all'
-
-    boolean builtin = true
+    List<String> modules = new ArrayList<>();
 
     Map<String, String> relocation = new LinkedHashMap<>()
 
+    def install(String... name) {
+        name.each { modules += it }
+    }
+
     def relocate(String pre, String post) {
-        this.relocation[pre] = post
+        relocation[pre] = post
     }
 }
