@@ -41,6 +41,7 @@ class RelocateJar extends DefaultTask {
         def name = inJar.name.substring(0, index) + (classifier == null ? "" : "-" + classifier) + inJar.name.substring(index)
         def outJar = new File(inJar.getParentFile(), name)
         def tmpOut = File.createTempFile(name, ".jar")
+        def isolated = new HashMap<String, List<String>>()
         new JarOutputStream(new FileOutputStream(tmpOut)).withCloseable { out ->
             project.logger.info(outJar.getAbsolutePath())
             int n
@@ -54,6 +55,7 @@ class RelocateJar extends DefaultTask {
                             def writer = new ClassWriter(0)
                             def visitor = new TabooLibClassVisitor(writer, project)
                             reader.accept(new ClassRemapper(visitor, remapper), 0)
+                            isolated.putAll(visitor.isolated)
                             out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
                             out.write(writer.toByteArray())
                         } else {

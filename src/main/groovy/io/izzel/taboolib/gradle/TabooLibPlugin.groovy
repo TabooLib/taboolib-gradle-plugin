@@ -29,7 +29,7 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
-                task.relocations['taboolib'] = task.relocations['taboolib'] ?: project.group.toString() + '.taboolib'
+                task.relocations['taboolib'] = project.group.toString() + '.taboolib'
             }
         }
     }
