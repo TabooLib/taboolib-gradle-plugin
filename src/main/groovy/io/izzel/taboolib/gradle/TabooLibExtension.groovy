@@ -9,7 +9,7 @@ class TabooLibExtension {
 
     String classifier = "all"
 
-    List<String> modules = new ArrayList<>();
+    List<String> modules = []
 
     Map<String, String> relocation = new LinkedHashMap<>()
 

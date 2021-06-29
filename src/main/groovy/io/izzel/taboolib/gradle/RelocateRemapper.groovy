@@ -1,6 +1,7 @@
 package io.izzel.taboolib.gradle
 
 import groovy.transform.Canonical
+import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.Remapper
 
 @Canonical
@@ -8,6 +9,8 @@ class RelocateRemapper extends Remapper {
 
     Map<String, String> dot
     Map<String, String> slash
+    Map<String, Set<String>> use = new TreeMap()
+    ClassRemapper remapper
 
     @Override
     Object mapValue(Object value) {
@@ -20,8 +23,12 @@ class RelocateRemapper extends Remapper {
         return super.mapValue(value)
     }
 
+    @SuppressWarnings('GroovyAccessibility')
     @Override
     String map(String internalName) {
+        if (remapper != null) {
+            use.computeIfAbsent(remapper.className) { new HashSet() }.add(internalName)
+        }
         def match = slash.find { internalName.startsWith(it.key) }
         if (match) {
             return match.value + internalName.substring(match.key.length())

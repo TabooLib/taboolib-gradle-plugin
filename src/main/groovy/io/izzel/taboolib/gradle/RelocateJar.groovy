@@ -46,7 +46,7 @@ class RelocateJar extends DefaultTask {
             project.logger.info(outJar.getAbsolutePath())
             int n
             def buf = new byte[32768]
-            new JarFile(inJar).withCloseable {jarFile ->
+            new JarFile(inJar).withCloseable { jarFile ->
                 for (def jarEntry : jarFile.entries()) {
                     jarFile.getInputStream(jarEntry).withCloseable {
                         if (jarEntry.name.endsWith(".class")) {
@@ -54,7 +54,9 @@ class RelocateJar extends DefaultTask {
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
                             def visitor = new TabooLibClassVisitor(writer, project)
-                            reader.accept(new ClassRemapper(visitor, remapper), 0)
+                            def rem = new ClassRemapper(visitor, remapper)
+                            remapper.remapper = rem
+                            reader.accept(rem, 0)
                             isolated.putAll(visitor.isolated)
                             out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
                             out.write(writer.toByteArray())
