@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
+import java.util.stream.Collectors
 
 @ToString
 class RelocateJar extends DefaultTask {
@@ -33,24 +34,25 @@ class RelocateJar extends DefaultTask {
     @Input
     Project project
 
+    @Input
+    TabooLibExtension tabooExt
+
     @TaskAction
     def relocate() {
+        def isolated = new TreeMap<String, List<String>>()
         def mapping = relocations.collectEntries { [(it.key.replace('.', '/')), it.value.replace('.', '/')] }
         def remapper = new RelocateRemapper(relocations, mapping as Map<String, String>)
         def index = inJar.name.lastIndexOf('.')
         def name = inJar.name.substring(0, index) + (classifier == null ? "" : "-" + classifier) + inJar.name.substring(index)
         def outJar = new File(inJar.getParentFile(), name)
-        def tmpOut = File.createTempFile(name, ".jar")
-        def isolated = new HashMap<String, List<String>>()
-        new JarOutputStream(new FileOutputStream(tmpOut)).withCloseable { out ->
-            project.logger.info(outJar.getAbsolutePath())
+        def tempOut1 = File.createTempFile(name, ".jar")
+        new JarOutputStream(new FileOutputStream(tempOut1)).withCloseable { out ->
             int n
             def buf = new byte[32768]
             new JarFile(inJar).withCloseable { jarFile ->
-                for (def jarEntry : jarFile.entries()) {
+                jarFile.entries().each { def jarEntry ->
                     jarFile.getInputStream(jarEntry).withCloseable {
                         if (jarEntry.name.endsWith(".class")) {
-                            project.logger.info("Relocating " + jarEntry.name)
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
                             def visitor = new TabooLibClassVisitor(writer, project)
@@ -70,6 +72,90 @@ class RelocateJar extends DefaultTask {
                 }
             }
         }
-        Files.copy(tmpOut.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        def use = new TreeMap<String, Set<String>>()
+        remapper.use.each {
+            it.value.each { e ->
+                def key = relocate(project, getNameWithOutExtension(e))
+                def value = relocate(project, getNameWithOutExtension(it.key))
+                use.computeIfAbsent(key) { new HashSet() }.add(value)
+            }
+        }
+        def transfer = new TreeMap()
+        isolated.each {
+            transfer[relocate(project, it.key)] = it.value.stream().map { i -> relocate(project, i) }.collect(Collectors.toList())
+        }
+        isolated = transfer
+        def tempOut2 = File.createTempFile(name, ".jar")
+        new JarOutputStream(new FileOutputStream(tempOut2)).withCloseable { out ->
+            int n
+            def buf = new byte[32768]
+            def del = new HashSet()
+            def exclude = new HashSet()
+            new JarFile(tempOut1).withCloseable { jarFile ->
+                jarFile.entries().each { def jarEntry ->
+                    jarFile.getInputStream(jarEntry).withCloseable {
+                        if (jarEntry.name.endsWith(".class")) {
+                            def nameWithOutExtension = getNameWithOutExtension(jarEntry.name)
+                            if (use.containsKey(nameWithOutExtension.toString()) && !exclude.contains(nameWithOutExtension)) {
+                                exclude.add(nameWithOutExtension)
+                                if (isIsolated(use, use[nameWithOutExtension], isolated, nameWithOutExtension)) {
+                                    println(" Isolated ${nameWithOutExtension}")
+                                    del.add(nameWithOutExtension)
+                                }
+                            }
+                        }
+                        if (!del.contains(getNameWithOutExtension(jarEntry.name))) {
+                            out.putNextEntry(new JarEntry(jarEntry.name))
+                            while ((n = it.read(buf)) != -1) {
+                                out.write(buf, 0, n)
+                            }
+                        }
+                    }
+                }
+                if (tabooExt.modules.contains("platform-bukkit")) {
+                    out.putNextEntry(new JarEntry("plugin.yml"))
+                    out.write(tabooExt.description.buildBukkitFile(project))
+                }
+                if (tabooExt.modules.contains("platform-nukkit")) {
+                    out.putNextEntry(new JarEntry("nukkit.yml"))
+                    out.write(tabooExt.description.buildNukkitFile(project))
+                }
+                if (tabooExt.modules.contains("platform-bungee")) {
+                    out.putNextEntry(new JarEntry("bungee.yml"))
+                    out.write(tabooExt.description.buildBungeeFile(project))
+                }
+                if (tabooExt.modules.contains("platform-sponge")) {
+                    out.putNextEntry(new JarEntry("mcmod.info"))
+                    out.write(tabooExt.description.buildSpongeFile(project))
+                }
+            }
+        }
+        Files.copy(tempOut2.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    static String getNameWithOutExtension(name) {
+        if (name.contains('$')) {
+            return name.substring(0, name.indexOf('$')).replace('.', '/')
+        } else if (name.contains('.')) {
+            return name.substring(0, name.lastIndexOf('.')).replace('.', '/')
+        } else {
+            return name.replace('.', '/')
+        }
+    }
+
+    static String relocate(Project project, String name) {
+        if (name.startsWith("taboolib")) {
+            return project.group.toString().replace('.', '/') + '/' + name.replace('.', '/')
+        } else {
+            return name.replace('.', '/')
+        }
+    }
+
+    static boolean isIsolated(Map<String, Set<String>> use, Set<String> refer, Map<String, List<String>> isolated, String nameWithOutExtension) {
+        if (isolated.containsKey(nameWithOutExtension)) {
+            return refer.size() <= 1 || refer.stream().allMatch { nameWithOutExtension == it || isolated[nameWithOutExtension].contains(it) || isIsolated(use, use[it], isolated, it) }
+        } else {
+            return false
+        }
     }
 }

@@ -23,6 +23,7 @@ dependencies {
     compile localGroovy()
     embed 'org.ow2.asm:asm:8.0.1'
     embed 'org.ow2.asm:asm-commons:8.0.1'
+    embed 'com.google.code.gson:gson:2.8.7'
 }
 
 jar {

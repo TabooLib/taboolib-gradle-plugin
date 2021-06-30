@@ -25,6 +25,7 @@ class TabooLibPlugin implements Plugin<Project> {
             }
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { RelocateJar task ->
+                task.tabooExt = tabooExt
                 task.project = project
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
