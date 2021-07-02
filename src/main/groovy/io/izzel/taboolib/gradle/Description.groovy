@@ -1,6 +1,5 @@
 package io.izzel.taboolib.gradle
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.gradle.api.Project
 import com.google.gson.JsonArray
@@ -21,7 +20,7 @@ class Description {
     def api = "1.0.0"
     def apiVersion = '1.13'
     def libraries
-    def dependencies = "spongeapi@7.2.0"
+    def dependencies
     def requiredMods = "spongeapi@7.2.0"
 
     static List<String> buildFile() {
@@ -123,11 +122,18 @@ class Description {
         }
         if (dependencies instanceof List<String>) {
             def arr = new JsonArray()
+            if (dependencies.none { "spongeapi" in it }) {
+                arr.add("spongeapi@7.2.0")
+            }
             dependencies.each { arr.add(it) }
             info.add("dependencies", arr)
         } else if (dependencies != null) {
             def arr = new JsonArray()
             arr.add(dependencies.toString())
+            info.add("dependencies", arr)
+        } else {
+            def arr = new JsonArray()
+            arr.add("spongeapi@7.2.0")
             info.add("dependencies", arr)
         }
         if (requiredMods instanceof List<String>) {
@@ -138,6 +144,35 @@ class Description {
             def arr = new JsonArray()
             arr.add(requiredMods.toString())
             info.add("requiredMods", arr)
+        }
+        base.add(info)
+        return new GsonBuilder().setPrettyPrinting().create().toJson(base).getBytes(StandardCharsets.UTF_8)
+    }
+
+    byte[] buildVelocityFile(Project project) {
+        def base = new JsonArray()
+        def info = new JsonObject()
+        info.addProperty("id", project.name.toLowerCase())
+        info.addProperty("name", project.name)
+        info.addProperty("main", "${project.group}.taboolib.platform.VelocityPlugin")
+        info.addProperty("version", project.version.toString())
+        if (authors instanceof List<String>) {
+            def arr = new JsonArray()
+            authors.each { arr.add(it) }
+            info.add("authors", arr)
+        } else if (authors != null) {
+            def arr = new JsonArray()
+            arr.add(authors.toString())
+            info.add("authors", arr)
+        }
+        if (dependencies instanceof List<String>) {
+            def arr = new JsonArray()
+            dependencies.each { arr.add(it) }
+            info.add("dependencies", arr)
+        } else if (dependencies != null) {
+            def arr = new JsonArray()
+            arr.add(dependencies.toString())
+            info.add("dependencies", arr)
         }
         base.add(info)
         return new GsonBuilder().setPrettyPrinting().create().toJson(base).getBytes(StandardCharsets.UTF_8)

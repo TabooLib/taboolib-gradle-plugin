@@ -4,11 +4,11 @@ import org.gradle.api.Project
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes
 
-class SpongeAnnotationVisitor extends AnnotationVisitor {
+class PluginAnnotationVisitor extends AnnotationVisitor {
 
     Project project
 
-    SpongeAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
+    PluginAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
         super(Opcodes.ASM7, annotationVisitor)
         this.project = project
     }

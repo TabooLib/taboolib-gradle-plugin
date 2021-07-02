@@ -26,8 +26,8 @@ class TabooLibClassVisitor extends ClassVisitor {
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
             return new IsolatedAnnotationVisitor(super.visitAnnotation(descriptor, visible), project, name, this)
-        } else if (descriptor == "Lorg/spongepowered/api/plugin/Plugin;") {
-            return new SpongeAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+        } else if (descriptor == "Lorg/spongepowered/api/plugin/Plugin;" || descriptor == "Lcom/velocitypowered/api/plugin/Plugin;") {
+            return new PluginAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         } else {
             return super.visitAnnotation(descriptor, visible)
         }

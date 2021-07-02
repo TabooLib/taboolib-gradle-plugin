@@ -128,6 +128,10 @@ class RelocateJar extends DefaultTask {
                     out.putNextEntry(new JarEntry("mcmod.info"))
                     out.write(tabooExt.description.buildSpongeFile(project))
                 }
+                if (tabooExt.modules.contains("platform-velocity")) {
+                    out.putNextEntry(new JarEntry("velocity-plugin.json"))
+                    out.write(tabooExt.description.buildVelocityFile(project))
+                }
             }
         }
         Files.copy(tempOut2.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
