@@ -11,6 +11,12 @@ class TabooLibClassVisitor extends ClassVisitor {
     Project project
     Map<String, List<String>> isolated = new HashMap()
 
+    List<String> annotations = [
+            "Lorg/spongepowered/api/plugin/Plugin;",
+            "Lorg/spongepowered/plugin/jvm/Plugin;",
+            "Lcom/velocitypowered/api/plugin/Plugin;"
+    ]
+
     TabooLibClassVisitor(ClassVisitor classVisitor, Project project) {
         super(Opcodes.ASM7, classVisitor);
         this.project = project
@@ -26,7 +32,7 @@ class TabooLibClassVisitor extends ClassVisitor {
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
             return new IsolatedAnnotationVisitor(super.visitAnnotation(descriptor, visible), project, name, this)
-        } else if (descriptor == "Lorg/spongepowered/api/plugin/Plugin;" || descriptor == "Lcom/velocitypowered/api/plugin/Plugin;") {
+        } else if (descriptor in annotations) {
             return new PluginAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         } else {
             return super.visitAnnotation(descriptor, visible)
