@@ -22,6 +22,7 @@ class Description {
     def libraries
     def dependencies
     def requiredMods = "spongeapi@7.2.0"
+    def custom = new HashMap<String, Object>()
 
     static List<String> buildFile() {
         def str = []
@@ -68,6 +69,13 @@ class Description {
         appendNameList(str, softdepend, "softdepend")
         appendNameList(str, loadbefore, "loadbefore")
         appendNameList(str, libraries, "libraries")
+        custom.entrySet().each {
+            if (it.value instanceof List) {
+                appendNameList(str, it.value, it.key)
+            } else {
+                appendName(str, it.value, it.key)
+            }
+        }
         return str.join("\n").getBytes(StandardCharsets.UTF_8)
     }
 
@@ -80,6 +88,13 @@ class Description {
         appendNameList(str, depend, "depends")
         appendNameList(str, softdepend, "softDepends")
         appendNameList(str, libraries, "libraries")
+        custom.entrySet().each {
+            if (it.value instanceof List) {
+                appendNameList(str, it.value, it.key)
+            } else {
+                appendName(str, it.value, it.key)
+            }
+        }
         return str.join("\n").getBytes(StandardCharsets.UTF_8)
     }
 
@@ -99,6 +114,13 @@ class Description {
         appendNameList(str, softdepend, "softdepend")
         appendNameList(str, loadbefore, "loadbefore")
         appendNameList(str, libraries, "libraries")
+        custom.entrySet().each {
+            if (it.value instanceof List) {
+                appendNameList(str, it.value, it.key)
+            } else {
+                appendName(str, it.value, it.key)
+            }
+        }
         return str.join("\n").getBytes(StandardCharsets.UTF_8)
     }
 
@@ -236,5 +258,9 @@ class Description {
 
     def requiredMods(requiredMods) {
         this.requiredMods = requiredMods
+    }
+
+    def custom(String key, value) {
+        this.custom[key] = value
     }
 }
