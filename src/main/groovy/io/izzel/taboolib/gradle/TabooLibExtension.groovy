@@ -1,7 +1,8 @@
 package io.izzel.taboolib.gradle
 
 import groovy.transform.Canonical
-import org.codehaus.groovy.runtime.DefaultGroovyMethods
+import io.izzel.taboolib.gradle.description.Description
+import org.gradle.api.Action
 
 @Canonical
 class TabooLibExtension {
@@ -12,7 +13,7 @@ class TabooLibExtension {
 
     List<String> modules = []
 
-    Description description = new Description()
+    Description des = new Description()
 
     Map<String, String> relocation = new LinkedHashMap<>()
 
@@ -24,7 +25,8 @@ class TabooLibExtension {
         relocation[pre] = post
     }
 
-    def descriptionFile(@DelegatesTo(Description.class) Closure<Description> closure) {
-        DefaultGroovyMethods.with(description, closure)
+    def description(closure) {
+        closure.delegate = des
+        closure()
     }
 }

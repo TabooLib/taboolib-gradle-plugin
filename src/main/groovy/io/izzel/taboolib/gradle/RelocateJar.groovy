@@ -1,6 +1,7 @@
 package io.izzel.taboolib.gradle
 
 import groovy.transform.ToString
+import io.izzel.taboolib.gradle.description.Platforms
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
@@ -112,25 +113,11 @@ class RelocateJar extends DefaultTask {
                         }
                     }
                 }
-                if (tabooExt.modules.contains("platform-bukkit")) {
-                    out.putNextEntry(new JarEntry("plugin.yml"))
-                    out.write(tabooExt.description.buildBukkitFile(project))
-                }
-                if (tabooExt.modules.contains("platform-nukkit")) {
-                    out.putNextEntry(new JarEntry("nukkit.yml"))
-                    out.write(tabooExt.description.buildNukkitFile(project))
-                }
-                if (tabooExt.modules.contains("platform-bungee")) {
-                    out.putNextEntry(new JarEntry("bungee.yml"))
-                    out.write(tabooExt.description.buildBungeeFile(project))
-                }
-                if (tabooExt.modules.contains("platform-sponge")) {
-                    out.putNextEntry(new JarEntry("mcmod.info"))
-                    out.write(tabooExt.description.buildSpongeFile(project))
-                }
-                if (tabooExt.modules.contains("platform-velocity")) {
-                    out.putNextEntry(new JarEntry("velocity-plugin.json"))
-                    out.write(tabooExt.description.buildVelocityFile(project))
+                Platforms.values().each {
+                    if (tabooExt.modules.contains(it.module)) {
+                        out.putNextEntry(new JarEntry(it.file))
+                        out.write(it.builder.build(tabooExt.des, project))
+                    }
                 }
             }
         }
