@@ -12,7 +12,6 @@ class TabooLibPlugin implements Plugin<Project> {
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         def taboo = project.configurations.maybeCreate('taboo')
         def tabooTask = project.tasks.create('tabooRelocateJar', RelocateJar)
-
         project.afterEvaluate {
             project.configurations.compileClasspath.extendsFrom(taboo)
             // subprojects
@@ -23,6 +22,7 @@ class TabooLibPlugin implements Plugin<Project> {
             project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
             }
+            def kv = project.plugins.findPlugin("org.jetbrains.kotlin.jvm").kotlinPluginVersion.replaceAll("[.-]", "_")
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { RelocateJar task ->
                 task.tabooExt = tabooExt
@@ -30,6 +30,7 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
+                task.relocations['kotlin'] = 'taboolib.library.kotlin_' + kv
                 task.relocations['taboolib'] = project.group.toString() + '.taboolib'
             }
         }

@@ -32,6 +32,10 @@ class TabooLibClassVisitor extends ClassVisitor {
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
             return new IsolatedAnnotationVisitor(super.visitAnnotation(descriptor, visible), project, name, this)
+        } else if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/env/RuntimeDependency;") {
+            return new KotlinAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+        } else if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/env/RuntimeDependencies;") {
+            return new KotlinAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         } else if (descriptor in annotations) {
             return new PluginAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         } else {
