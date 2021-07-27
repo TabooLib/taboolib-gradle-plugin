@@ -142,9 +142,19 @@ class RelocateJar extends DefaultTask {
         }
     }
 
-    static boolean isIsolated(Map<String, Set<String>> use, Set<String> refer, Map<String, List<String>> isolated, String nameWithOutExtension) {
-        if (isolated.containsKey(nameWithOutExtension)) {
-            return refer.size() <= 1 || refer.stream().allMatch { nameWithOutExtension == it || isolated[nameWithOutExtension].contains(it) || isIsolated(use, use[it], isolated, it) }
+    static boolean isIsolated(
+            Map<String, Set<String>> use,
+            Set<String> refer,
+            Map<String, List<String>> isolated,
+            String name,
+            String exclude = null
+    ) {
+        if (isolated.containsKey(name)) {
+            return refer.size() <= 1 || refer.stream()
+                    .filter { it != exclude }
+                    .allMatch {
+                        name == it || isolated[name].contains(it) || isIsolated(use, use[it], isolated, it, name)
+                    }
         } else {
             return false
         }
