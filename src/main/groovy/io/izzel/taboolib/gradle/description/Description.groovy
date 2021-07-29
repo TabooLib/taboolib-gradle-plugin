@@ -48,18 +48,15 @@ class Description {
         nukkitNodes['prefix'] = prefix
     }
 
-    def contributors(@DelegatesTo(Contributors.class) closure) {
-        closure.delegate = con
-        closure()
+    def contributors(Action<? super Contributors> action) {
+        action.execute(con)
     }
 
-    def dependencies(@DelegatesTo(Dependencies.class) closure) {
-        closure.delegate = dep
-        closure()
+    def dependencies(Action<? super Dependencies> action) {
+        action.execute(dep)
     }
 
-    def links(@DelegatesTo(Links.class) closure) {
-        closure.delegate = lin
-        closure()
+    def links(Action<? super Links> action) {
+        action.execute(lin)
     }
 }
