@@ -18,6 +18,7 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.stream.Collectors
+import java.util.zip.ZipException
 
 @ToString
 class RelocateJar extends DefaultTask {
@@ -61,10 +62,20 @@ class RelocateJar extends DefaultTask {
                             remapper.remapper = rem
                             reader.accept(rem, 0)
                             isolated.putAll(visitor.isolated)
-                            out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                            try {
+                                out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                            } catch(ZipException zipException) {
+                                println(zipException)
+                                return true
+                            }
                             out.write(writer.toByteArray())
                         } else {
-                            out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                            try {
+                                out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                            } catch(ZipException zipException) {
+                                println(zipException)
+                                return true
+                            }
                             while ((n = it.read(buf)) != -1) {
                                 out.write(buf, 0, n)
                             }
