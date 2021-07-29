@@ -25,7 +25,7 @@ class TabooLibExtension {
         relocation[pre] = post
     }
 
-    def description(closure) {
+    def description(@DelegatesTo(Description.class) closure) {
         closure.delegate = des
         closure()
     }
