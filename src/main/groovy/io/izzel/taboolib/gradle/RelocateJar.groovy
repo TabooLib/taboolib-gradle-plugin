@@ -53,7 +53,7 @@ class RelocateJar extends DefaultTask {
             def buf = new byte[32768]
             new JarFile(inJar).withCloseable { jarFile ->
                 jarFile.entries().each { def jarEntry ->
-                    if (tabooExt.exclude.none { String e -> jarEntry.name.matches(e) }) {
+                    if (tabooExt.exclude.stream().noneMatch { String e -> jarEntry.name.matches(e) }) {
                         jarFile.getInputStream(jarEntry).withCloseable {
                             if (jarEntry.name.endsWith(".class")) {
                                 def reader = new ClassReader(it)
