@@ -53,32 +53,35 @@ class RelocateJar extends DefaultTask {
             def buf = new byte[32768]
             new JarFile(inJar).withCloseable { jarFile ->
                 jarFile.entries().each { def jarEntry ->
-                    jarFile.getInputStream(jarEntry).withCloseable {
-                        if (jarEntry.name.endsWith(".class")) {
-                            def reader = new ClassReader(it)
-                            def writer = new ClassWriter(0)
-                            def visitor = new TabooLibClassVisitor(writer, project)
-                            def rem = new ClassRemapper(visitor, remapper)
-                            remapper.remapper = rem
-                            reader.accept(rem, 0)
-                            isolated.putAll(visitor.isolated)
-                            try {
-                                out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
-                            } catch(ZipException zipException) {
-                                println(zipException)
-                                return true
+                    if (tabooExt.exclude.none { String e -> jarEntry.name.matches(e) }) {
+                        jarFile.getInputStream(jarEntry).withCloseable {
+                            if (jarEntry.name.endsWith(".class")) {
+                                def reader = new ClassReader(it)
+                                def writer = new ClassWriter(0)
+                                def visitor = new TabooLibClassVisitor(writer, project)
+                                def rem = new ClassRemapper(visitor, remapper)
+                                remapper.remapper = rem
+                                reader.accept(rem, 0)
+                                isolated.putAll(visitor.isolated)
+                                try {
+                                    out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                                } catch(ZipException zipException) {
+                                    println(zipException)
+                                    return true
+                                }
+                                out.write(writer.toByteArray())
+                            } else {
+                                try {
+                                    out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
+                                } catch(ZipException ex) {
+                                    println(ex)
+                                    return true
+                                }
+                                while ((n = it.read(buf)) != -1) {
+                                    out.write(buf, 0, n)
+                                }
                             }
-                            out.write(writer.toByteArray())
-                        } else {
-                            try {
-                                out.putNextEntry(new JarEntry(remapper.map(jarEntry.name)))
-                            } catch(ZipException zipException) {
-                                println(zipException)
-                                return true
-                            }
-                            while ((n = it.read(buf)) != -1) {
-                                out.write(buf, 0, n)
-                            }
+                            null
                         }
                     }
                 }
