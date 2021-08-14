@@ -2,23 +2,25 @@ package io.izzel.taboolib.gradle.description
 
 enum Platforms {
 
-    BUKKIT('platform-bukkit', 'plugin.yml', new BuilderBukkit()),
+    BUKKIT('Bukkit', 'platform-bukkit', 'plugin.yml', new BuilderBukkit()),
 
-    NUKKIT('platform-nukkit', 'nukkit.yml', new BuilderNukkit()),
+    NUKKIT('Nukkit', 'platform-nukkit', 'nukkit.yml', new BuilderNukkit()),
 
-    BUNGEE('platform-bungee', 'bungee.yml', new BuilderBungee()),
+    BUNGEE('Bungee', 'platform-bungee', 'bungee.yml', new BuilderBungee()),
 
-    VELOCITY('platform-velocity', 'velocity-plugin.json', new BuilderVelocity()),
+    VELOCITY('Velocity', 'platform-velocity', 'velocity-plugin.json', new BuilderVelocity()),
 
-    SPONGE7('platform-sponge-api7', 'mcmod.info', new BuilderSponge7()),
+    SPONGE7('Sponge7', 'platform-sponge-api7', 'mcmod.info', new BuilderSponge7()),
 
-    SPONGE8('platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8());
+    SPONGE8('Sponge8', 'platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8());
 
+    String key
     String module
     String file
     Builder builder
 
-    Platforms(module, file, builder) {
+    Platforms(key, module, file, builder) {
+        this.key = key
         this.module = module
         this.file = file
         this.builder = builder

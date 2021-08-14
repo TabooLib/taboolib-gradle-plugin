@@ -30,8 +30,10 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
-                task.relocations['kotlin'] = 'taboolib.library.kotlin_' + kv
                 task.relocations['taboolib'] = project.group.toString() + '.taboolib'
+                if (!tabooExt.options.contains("skip-kotlin")) {
+                    task.relocations['kotlin'] = 'taboolib.library.kotlin_' + kv
+                }
             }
         }
     }

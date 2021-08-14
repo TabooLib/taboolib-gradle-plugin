@@ -19,8 +19,14 @@ class TabooLibExtension {
 
     Map<String, String> relocation = new LinkedHashMap<>()
 
+    List<String> options = []
+
     def install(String... name) {
         name.each { modules += it }
+    }
+
+    def options(String... opt) {
+        opt.each { options += it }
     }
 
     def exclude(String match) {

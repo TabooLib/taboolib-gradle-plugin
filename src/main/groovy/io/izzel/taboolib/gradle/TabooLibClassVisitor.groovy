@@ -3,13 +3,18 @@ package io.izzel.taboolib.gradle
 import org.gradle.api.Project
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 class TabooLibClassVisitor extends ClassVisitor {
 
     String name
+
     Project project
+
     Map<String, List<String>> isolated = new HashMap()
+
+    Set<MethodVisit> methodVisits = new HashSet<>()
 
     List<String> annotations = [
             "Lorg/spongepowered/api/plugin/Plugin;",
@@ -26,6 +31,11 @@ class TabooLibClassVisitor extends ClassVisitor {
     void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         this.name = name
         super.visit(version, access, name, signature, superName, interfaces)
+    }
+
+    @Override
+    MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+        return new TabooLibMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions), this)
     }
 
     @Override
