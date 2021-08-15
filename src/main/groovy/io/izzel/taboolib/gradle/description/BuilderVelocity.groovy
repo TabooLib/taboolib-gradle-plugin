@@ -8,7 +8,6 @@ class BuilderVelocity extends Builder {
 
     @Override
     byte[] build(Description description, Project project) {
-        def json = new JsonArray()
         def info = new JsonObject()
         info.addProperty('id', project.name.toLowerCase())
         info.addProperty('name', project.name)
@@ -21,7 +20,6 @@ class BuilderVelocity extends Builder {
         writeList(info, description.dep.dependencies
                 .findAll { it.with == null || it.with.equalsIgnoreCase('velocity') }
                 .collect { it.name }, 'dependencies')
-        json.add(info)
-        return bytes(json)
+        return bytes(info)
     }
 }

@@ -13,8 +13,8 @@ class BuilderBungee extends Builder {
         write(body, description.lin.links['homepage'], 'website')
         writeLine(body)
         // authors
-        def con = description.con.contributors.collect { it.name }
-        writeList(body, con, 'authors')
+        def con = description.con.contributors.collect { it.name }.join(', ')
+        write(body, con, 'author')
         writeLine(body)
         // dependency
         writeList(body, description.dep.dependencies
