@@ -22,7 +22,7 @@ class TabooLibPlugin implements Plugin<Project> {
             project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
             }
-            def kv = project.plugins.findPlugin("org.jetbrains.kotlin.jvm").kotlinPluginVersion.replaceAll("[.-]", "_")
+            def kv = project.plugins.findPlugin("org.jetbrains.kotlin.jvm").kotlinPluginVersion.replaceAll("[._-]", "")
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { RelocateJar task ->
                 task.tabooExt = tabooExt
@@ -31,8 +31,8 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
                 task.relocations['taboolib'] = project.group.toString() + '.taboolib'
-                if (!tabooExt.options.contains("skip-kotlin")) {
-                    task.relocations['kotlin'] = 'taboolib.library.kotlin_' + kv
+                if (!tabooExt.options.contains("skip-kotlin") && !tabooExt.options.contains("skip-kotlin-relocate")) {
+                    task.relocations['kotlin'] = 'kotlin' + kv
                 }
             }
         }

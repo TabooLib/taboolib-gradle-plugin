@@ -50,6 +50,6 @@ class KotlinAnnotationVisitor extends AnnotationVisitor {
     }
 
     String getKotlinVersionEscape() {
-        return getKotlinVersion().replaceAll("[.-]", "_")
+        return getKotlinVersion().replaceAll("[._-]", "")
     }
 }
