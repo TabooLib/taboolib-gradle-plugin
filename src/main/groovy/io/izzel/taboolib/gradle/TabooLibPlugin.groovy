@@ -32,7 +32,7 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.classifier = tabooExt.classifier
                 task.relocations['taboolib'] = project.group.toString() + '.taboolib'
                 if (!tabooExt.options.contains("skip-kotlin") && !tabooExt.options.contains("skip-kotlin-relocate")) {
-                    task.relocations['kotlin.'] = 'kotlin.' + kv
+                    task.relocations['kotlin.'] = 'kotlin' + kv + '.'
                 }
             }
         }
