@@ -29,6 +29,9 @@ class RelocateRemapper extends Remapper {
         if (remapper != null) {
             use.computeIfAbsent(remapper.className) { new HashSet() }.add(internalName)
         }
+        if (internalName == 'kotlin.Metadata') {
+            return internalName
+        }
         def match = slash.find { internalName.startsWith(it.key) }
         if (match) {
             return match.value + internalName.substring(match.key.length())
