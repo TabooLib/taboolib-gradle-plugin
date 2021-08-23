@@ -40,7 +40,9 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     @Override
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-        if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
+        if (descriptor == "Lkotlin/Metadata;") {
+            return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+        } else if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
             return new IsolatedAnnotationVisitor(super.visitAnnotation(descriptor, visible), project, name, this)
         } else if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/env/RuntimeDependency;") {
             return new KotlinAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
