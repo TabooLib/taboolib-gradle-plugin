@@ -122,7 +122,6 @@ class OptimizeFileReader(project: Project, input: InputStream) {
                     set.removeAll(member)
                     set.removeAll(exclude)
                     if (set.isNotEmpty()) {
-                        println("$s -> $set")
                         return false
                     }
                 }
