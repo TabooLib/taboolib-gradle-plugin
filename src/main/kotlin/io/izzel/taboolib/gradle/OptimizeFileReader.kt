@@ -106,7 +106,7 @@ class OptimizeFileReader(project: Project, input: InputStream) {
             if (member.any { name.startsWith(it) }) {
                 if (depend != null) {
                     val fail = depend.name.any { n ->
-                        val set = use[n]!!.toMutableList()
+                        val set = use[n]?.toMutableList() ?: ArrayList()
                         set.remove(n)
                         set.removeAll(depend.exclude)
                         set.isNotEmpty()
@@ -116,12 +116,13 @@ class OptimizeFileReader(project: Project, input: InputStream) {
                     }
                 }
                 for (s in check) {
-                    val set = use[s]!!.toMutableList()
+                    val set = use[s]?.toMutableList() ?: ArrayList()
                     set.remove(s)
                     set.removeAll(check)
                     set.removeAll(member)
                     set.removeAll(exclude)
                     if (set.isNotEmpty()) {
+                        println("$s -> $set")
                         return false
                     }
                 }
