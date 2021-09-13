@@ -23,5 +23,10 @@ class Links {
             this.url = url
             return this
         }
+
+        @Override
+        String toString() {
+            return url
+        }
     }
 }
