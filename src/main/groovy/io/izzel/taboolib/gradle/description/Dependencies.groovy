@@ -12,6 +12,8 @@ class Dependencies {
 
     class Dependency {
 
+        // 适应 CloudNet 依赖
+        String group
         String name
         String with
         String version
@@ -25,6 +27,11 @@ class Dependencies {
             this.name = name
         }
 
+        Dependency(group, name) {
+            this.group = group
+            this.name = name
+        }
+
         def fullyName(spec = '@') {
             return version == null ? name : name + spec + version
         }
@@ -35,6 +42,11 @@ class Dependencies {
 
         Dependency with(description) {
             this.with = description
+            return this
+        }
+
+        Dependency group(group) {
+            this.group = group
             return this
         }
 
