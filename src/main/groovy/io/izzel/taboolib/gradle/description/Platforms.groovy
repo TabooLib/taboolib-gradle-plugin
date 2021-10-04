@@ -10,6 +10,8 @@ enum Platforms {
 
     VELOCITY('Velocity', 'platform-velocity', 'velocity-plugin.json', new BuilderVelocity()),
 
+    CLOUDNETV3('CloudNetV3', 'platform-cloudnet-v3', 'module.json', new BuilderCloudNetV3()),
+
     SPONGE7('Sponge7', 'platform-sponge-api7', 'mcmod.info', new BuilderSponge7()),
 
     SPONGE8('Sponge8', 'platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8());
