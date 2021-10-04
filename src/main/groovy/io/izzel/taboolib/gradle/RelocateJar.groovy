@@ -81,7 +81,7 @@ class RelocateJar extends DefaultTask {
                     if (path == "taboolib/common/env/KotlinEnv.class" && (options.contains("skip-kotlin") || options.contains("skip-kotlin-relocate"))) {
                         return
                     }
-                    if (path == "taboolib/common/env/KotlinEnvNoRelocate.class" && !options.contains("skip-kotlin-relocation")) {
+                    if (path == "taboolib/common/env/KotlinEnvNoRelocate.class" && !options.contains("skip-kotlin-relocate")) {
                         return
                     }
                     // 忽略依赖加载部分代码
