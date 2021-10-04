@@ -27,13 +27,13 @@ class BuilderCloudNetV3 extends Builder {
         }
         // dependencies
         def depends = new JsonArray()
-        description.dep.dependencies.forEach(it -> {
+        description.dep.dependencies.forEach { it ->
             def depend = new JsonObject()
             depend.addProperty('group', it.group)
             depend.addProperty('name', it.name)
             depend.addProperty('version', it.version)
             depends.add(depend)
-        })
+        }
         return bytes(info)
     }
 }
