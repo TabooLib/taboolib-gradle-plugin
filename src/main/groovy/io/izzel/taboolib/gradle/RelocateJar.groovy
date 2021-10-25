@@ -41,7 +41,7 @@ class RelocateJar extends DefaultTask {
 
     @TaskAction
     def relocate() {
-        // 缓存
+        // 缓
         def optimize = []
         def isolated = new TreeMap<String, List<String>>()
         def methodVisits = new TreeMap<String, Set<MethodVisit>>()
@@ -98,14 +98,14 @@ class RelocateJar extends DefaultTask {
                         if (path.endsWith(".class")) {
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
-                            def visitor = new TabooLibClassVisitor(writer, project)
+                            def visitor = new TabooLibClassVisitor(writer, project, tabooExt)
                             def rem = new ClassRemapper(visitor, remapper)
                             remapper.remapper = rem
                             reader.accept(rem, 0)
                             // 提取孤立类
                             isolated.putAll(visitor.isolated)
                             // 提取方法访问记录
-                            methodVisits.put(relocate(project, jarEntry.name), visitor.methodVisits)
+                            methodVisits.put(relocate(project, jarEntry.name, tabooExt), visitor.methodVisits)
                             // 写回文件
                             // 拦截报错防止文件名称重复导致编译终止
                             try {
@@ -137,8 +137,8 @@ class RelocateJar extends DefaultTask {
         def use = new TreeMap<String, Set<String>>()
         remapper.use.each {
             it.value.each { e ->
-                def key = relocate(project, getNameWithOutExtension(e))
-                def value = relocate(project, getNameWithOutExtension(it.key))
+                def key = relocate(project, getNameWithOutExtension(e), tabooExt)
+                def value = relocate(project, getNameWithOutExtension(it.key), tabooExt)
                 use.computeIfAbsent(key) { new HashSet() }.add(value)
             }
         }
@@ -150,7 +150,7 @@ class RelocateJar extends DefaultTask {
         }
         def transfer = new TreeMap()
         isolated.each {
-            transfer[relocate(project, it.key)] = it.value.stream().map { i -> relocate(project, i) }.collect(Collectors.toList())
+            transfer[relocate(project, it.key, tabooExt)] = it.value.stream().map { i -> relocate(project, i, tabooExt) }.collect(Collectors.toList())
         }
         isolated = transfer
 
@@ -184,12 +184,15 @@ class RelocateJar extends DefaultTask {
                         }
                     }
                 }
-                Platforms.values().each {
-                    if (tabooExt.modules.contains(it.module)) {
-                        out.putNextEntry(new JarEntry(it.file))
-                        out.write(it.builder.build(tabooExt.des, project))
+                if (!tabooExt.options.contains("skip-plugin-file")) {
+                    Platforms.values().each {
+                        if (tabooExt.modules.contains(it.module)) {
+                            out.putNextEntry(new JarEntry(it.file))
+                            out.write(it.builder.build(tabooExt.des, project))
+                        }
                     }
                 }
+                null
             }
         }
         Files.copy(tempOut2.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -205,8 +208,8 @@ class RelocateJar extends DefaultTask {
         }
     }
 
-    static String relocate(Project project, String name) {
-        if (name.startsWith("taboolib")) {
+    static String relocate(Project project, String name, TabooLibExtension tabooExt) {
+        if (name.startsWith("taboolib") && !tabooExt.options.contains("skip-taboolib-relocate")) {
             return project.group.toString().replace('.', '/') + '/' + name.replace('.', '/')
         } else {
             return name.replace('.', '/')
@@ -233,7 +236,7 @@ class RelocateJar extends DefaultTask {
 
 
     @Override
-    public String toString() {
+    String toString() {
         return "RelocateJar{}";
     }
 }

@@ -12,6 +12,8 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     Project project
 
+    TabooLibExtension tabooExt
+
     Map<String, List<String>> isolated = new HashMap()
 
     Set<MethodVisit> methodVisits = new HashSet<>()
@@ -22,9 +24,10 @@ class TabooLibClassVisitor extends ClassVisitor {
             "Lcom/velocitypowered/api/plugin/Plugin;"
     ]
 
-    TabooLibClassVisitor(ClassVisitor classVisitor, Project project) {
+    TabooLibClassVisitor(ClassVisitor classVisitor, Project project, TabooLibExtension tabooExt) {
         super(Opcodes.ASM7, classVisitor);
         this.project = project
+        this.tabooExt = tabooExt
     }
 
     @Override
@@ -40,6 +43,9 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     @Override
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        if (tabooExt.options.contains("skip-taboolib-relocate")) {
+            return super.visitAnnotation(descriptor, visible)
+        }
         if (descriptor == "Lkotlin/Metadata;") {
             return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         } else if (descriptor == "L${project.group.replace('.', '/')}/taboolib/common/Isolated;") {
