@@ -21,6 +21,8 @@ class TabooLibExtension {
 
     List<String> options = []
 
+    String rootPackage = null
+
     def install(String... name) {
         name.each { modules += it }
     }

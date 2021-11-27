@@ -210,7 +210,8 @@ class RelocateJar extends DefaultTask {
 
     static String relocate(Project project, String name, TabooLibExtension tabooExt) {
         if (name.startsWith("taboolib") && !tabooExt.options.contains("skip-taboolib-relocate")) {
-            return project.group.toString().replace('.', '/') + '/' + name.replace('.', '/')
+            def root = tabooExt.rootPackage ?: project.group.toString()
+            return root.replace('.', '/') + '/' + name.replace('.', '/')
         } else {
             return name.replace('.', '/')
         }
