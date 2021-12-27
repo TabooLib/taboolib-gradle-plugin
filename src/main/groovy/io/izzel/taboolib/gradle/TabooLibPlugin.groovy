@@ -2,6 +2,7 @@ package io.izzel.taboolib.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.jvm.tasks.Jar
 
 class TabooLibPlugin implements Plugin<Project> {
@@ -24,6 +25,7 @@ class TabooLibPlugin implements Plugin<Project> {
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
+                task.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             }
             def kv = project.plugins.findPlugin("org.jetbrains.kotlin.jvm").kotlinPluginVersion.replaceAll("[._-]", "")
             def jarTask = project.tasks.jar as Jar
