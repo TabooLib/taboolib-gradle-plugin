@@ -9,7 +9,7 @@ plugins {
 apply plugin: 'kotlin'
 
 group 'io.izzel.taboolib'
-version '1.36'
+version '1.37'
 
 configurations {
     embed

@@ -67,6 +67,7 @@ class RelocateJar extends DefaultTask {
                     if (tabooExt.exclude.stream().any { String e -> path.startsWith(e) }) {
                         return
                     }
+                    def options = tabooExt.options
                     // 忽略模块文件
                     if (path.endsWith(".kotlin_module") && !options.contains("keep-kotlin-module")) {
                         return
@@ -77,7 +78,6 @@ class RelocateJar extends DefaultTask {
                         return
                     }
                     // 忽略 Kotlin 依赖
-                    def options = tabooExt.options
                     if (path == "taboolib/common/env/KotlinEnv.class" && (options.contains("skip-kotlin") || options.contains("skip-kotlin-relocate"))) {
                         return
                     }
