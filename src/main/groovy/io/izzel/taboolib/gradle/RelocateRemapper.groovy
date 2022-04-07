@@ -34,6 +34,9 @@ class RelocateRemapper extends Remapper {
         }
         def match = slash.find { internalName.startsWith(it.key) }
         if (match) {
+            if (match.value.startsWith("!")) {
+                return match.value.substring(1)
+            }
             return match.value + internalName.substring(match.key.length())
         } else {
             return internalName

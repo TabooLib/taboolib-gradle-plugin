@@ -68,7 +68,7 @@ class RelocateJar extends DefaultTask {
                         return
                     }
                     // 忽略优化指示文件
-                    if (path.startsWith("META-INF/tf") && path.endsWith(".json")) {
+                    if (path.startsWith("META-INF/tf") && path.endsWith(".json") && !options.contains("skip-minimize")) {
                         optimize.add(Bridge.newOptimizeFileReader(project, jarFile.getInputStream(jarEntry)))
                         return
                     }
