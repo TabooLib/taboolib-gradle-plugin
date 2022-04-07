@@ -44,7 +44,13 @@ class TabooLibClassVisitor extends ClassVisitor {
     @Override
     AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         if (tabooExt.options.contains("skip-taboolib-relocate")) {
-            return super.visitAnnotation(descriptor, visible)
+            if (descriptor == "Ltaboolib/common/env/RuntimeDependency;") {
+                return new KotlinAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+            } else if (descriptor == "Ltaboolib/common/env/RuntimeDependencies;") {
+                return new KotlinAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+            } else {
+                return super.visitAnnotation(descriptor, visible)
+            }
         }
         if (descriptor == "Lkotlin/Metadata;") {
             return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
