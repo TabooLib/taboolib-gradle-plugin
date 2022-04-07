@@ -67,6 +67,10 @@ class RelocateJar extends DefaultTask {
                     if (tabooExt.exclude.stream().any { String e -> path.startsWith(e) }) {
                         return
                     }
+                    // 忽略模块文件
+                    if (path.endsWith(".kotlin_module") && !options.contains("keep-kotlin-module")) {
+                        return
+                    }
                     // 忽略优化指示文件
                     if (path.startsWith("META-INF/tf") && path.endsWith(".json") && !options.contains("skip-minimize")) {
                         optimize.add(Bridge.newOptimizeFileReader(project, jarFile.getInputStream(jarEntry)))
