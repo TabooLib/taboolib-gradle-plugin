@@ -1,3 +1,5 @@
+package io.izzel.taboolib.gradle
+
 import org.gradle.api.DefaultTask
 
 abstract class PrepareMinecraftServerEnvTask: DefaultTask() {
