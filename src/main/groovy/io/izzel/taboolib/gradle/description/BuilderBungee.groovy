@@ -7,7 +7,7 @@ class BuilderBungee extends Builder {
     @Override
     byte[] build(Description description, Project project) {
         def body = startBukkitFile()
-        body += "name: ${project.name}"
+        body += "name: ${description.name ?: project.name}"
         body += "main: ${project.group}.taboolib.platform.BungeePlugin"
         body += "version: ${project.version}"
         write(body, description.lin.links['homepage'], 'website')

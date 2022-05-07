@@ -1,15 +1,7 @@
 package io.izzel.taboolib.gradle
 
 
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.TupleConstructor
-import org.objectweb.asm.AnnotationVisitor
-import org.objectweb.asm.Attribute
-import org.objectweb.asm.Handle
-import org.objectweb.asm.Label
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.TypePath
+import org.objectweb.asm.*
 
 class TabooLibMethodVisitor extends MethodVisitor {
 

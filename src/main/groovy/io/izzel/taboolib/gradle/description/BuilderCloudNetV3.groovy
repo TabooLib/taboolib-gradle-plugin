@@ -15,7 +15,7 @@ class BuilderCloudNetV3 extends Builder {
     byte[] build(Description description, Project project) {
         def info = new JsonObject()
         info.addProperty('group', project.group.toString())
-        info.addProperty('name', project.name)
+        info.addProperty('name', description.name ?: project.name)
         info.addProperty('main', "${project.group}.taboolib.platform.CloudNetV3Plugin")
         info.addProperty('version', project.version.toString())
         // authors

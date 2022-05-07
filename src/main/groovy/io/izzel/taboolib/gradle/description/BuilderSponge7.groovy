@@ -11,7 +11,7 @@ class BuilderSponge7 extends Builder {
         def json = new JsonArray()
         def info = new JsonObject()
         info.addProperty('modid', project.name.toLowerCase())
-        info.addProperty('name', project.name)
+        info.addProperty('name', description.name ?: project.name)
         info.addProperty('version', project.version.toString())
         write(info, description.spongeDesc, 'description')
         write(info, description.lin.links['homepage'], 'url')

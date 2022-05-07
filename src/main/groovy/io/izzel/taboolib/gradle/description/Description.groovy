@@ -18,9 +18,15 @@ class Description {
 
     String spongeDesc
 
+    String name
+
     Description() {
         bukkitApi('1.13')
         nukkitApi('1.0.0')
+    }
+
+    def name(name) {
+        this.name = name
     }
 
     def desc(desc) {
