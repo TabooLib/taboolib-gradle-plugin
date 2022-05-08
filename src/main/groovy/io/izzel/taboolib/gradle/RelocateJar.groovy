@@ -161,6 +161,7 @@ class RelocateJar extends DefaultTask {
             def buf = new byte[32768]
             def del = new HashSet()
             def exclude = new HashSet()
+            def options = tabooExt.options
             new JarFile(tempOut1).withCloseable { jarFile ->
                 jarFile.entries().each { JarEntry jarEntry ->
                     if (optimize.any { it.exclude(jarEntry.name, use) }) {
@@ -171,7 +172,7 @@ class RelocateJar extends DefaultTask {
                             def nameWithOutExtension = getNameWithOutExtension(jarEntry.name)
                             if (use.containsKey(nameWithOutExtension.toString()) && !exclude.contains(nameWithOutExtension)) {
                                 exclude.add(nameWithOutExtension)
-                                if (isIsolated(use, use[nameWithOutExtension], isolated, nameWithOutExtension)) {
+                                if (!options.contains("skip-minimize") && isIsolated(use, use[nameWithOutExtension], isolated, nameWithOutExtension)) {
                                     del.add(nameWithOutExtension)
                                 }
                             }
@@ -187,8 +188,12 @@ class RelocateJar extends DefaultTask {
                 if (!tabooExt.options.contains("skip-plugin-file")) {
                     Platforms.values().each {
                         if (tabooExt.modules.contains(it.module)) {
-                            out.putNextEntry(new JarEntry(it.file))
-                            out.write(it.builder.build(tabooExt.des, project))
+                            try {
+                                out.putNextEntry(new JarEntry(it.file))
+                                out.write(it.builder.build(tabooExt.des, project))
+                            } catch (ZipException ignored) {
+                                // ignore
+                            }
                         }
                     }
                 }
