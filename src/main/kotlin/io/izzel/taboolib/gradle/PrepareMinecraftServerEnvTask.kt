@@ -1,9 +1,18 @@
 package io.izzel.taboolib.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.*
+import org.gradle.api.tasks.*
+import org.gradle.api.tasks.options.*
+import java.io.File
 
-abstract class PrepareMinecraftServerEnvTask: DefaultTask() {
-    init { group="TabooLibLoom" }
+abstract class PrepareMinecraftServerEnvTask : DefaultTask() {
+
+    init {
+        group = "TabooLibLoom"
+    }
+
     @get:Input
     @get:Option(option = "jarUrl", description = "To download the server jar.")
     abstract val jarUrl: Property<String>
