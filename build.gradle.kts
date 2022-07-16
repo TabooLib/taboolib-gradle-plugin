@@ -23,13 +23,15 @@ dependencies {
     compileOnly("org.codehaus.groovy:groovy:3.0.11")
     compileOnly(gradleApi())
     compileOnly(localGroovy())
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     "embed"("org.ow2.asm:asm:9.3")
     "embed"("org.ow2.asm:asm-commons:9.3")
     "embed"("com.google.code.gson:gson:2.9.0")
     "embed"(kotlin("stdlib"))
 }
 
-tasks.withType<Jar> {
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.getByName("embed").map { if (it.isDirectory) it else zipTree(it) })
 }
 
@@ -66,5 +68,8 @@ tasks.compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
 
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
