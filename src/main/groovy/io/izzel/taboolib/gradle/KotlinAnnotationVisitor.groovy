@@ -1,6 +1,7 @@
 package io.izzel.taboolib.gradle
 
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapperKt
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Opcodes
 
@@ -46,7 +47,7 @@ class KotlinAnnotationVisitor extends AnnotationVisitor {
     }
 
     String getKotlinVersion() {
-        return project.plugins.findPlugin("org.jetbrains.kotlin.jvm").kotlinPluginVersion
+        return KotlinPluginWrapperKt.getKotlinPluginVersion(project)
     }
 
     String getKotlinVersionEscape() {
