@@ -21,7 +21,7 @@ class TabooLibPlugin implements Plugin<Project> {
             project.configurations.compileClasspath.extendsFrom(taboo)
             // subprojects
             tabooExt.modules.each {
-                project.configurations.taboo.dependencies.add(project.dependencies.create("io.izzel:taboolib:${tabooExt.version}:${it}"))
+                project.configurations.taboo.dependencies.add(project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version}"))
             }
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
