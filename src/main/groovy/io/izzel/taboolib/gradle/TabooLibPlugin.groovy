@@ -14,6 +14,9 @@ class TabooLibPlugin implements Plugin<Project> {
             url project.uri("http://ptms.ink:8081/repository/releases/")
             allowInsecureProtocol true
         }
+        project.repositories.maven {
+            url project.uri("https://repo.spongepowered.org/maven")
+        }
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         def taboo = project.configurations.maybeCreate('taboo')
         def tabooTask = project.tasks.create('tabooRelocateJar', RelocateJar)
@@ -23,6 +26,9 @@ class TabooLibPlugin implements Plugin<Project> {
             tabooExt.modules.each {
                 project.configurations.taboo.dependencies.add(project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version}"))
             }
+            // com.mojang:datafixerupper:4.0.26
+            project.dependencies.add('compileOnly', 'com.mojang:datafixerupper:4.0.26')
+
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
