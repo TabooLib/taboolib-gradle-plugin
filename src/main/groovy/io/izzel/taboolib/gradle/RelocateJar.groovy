@@ -85,7 +85,7 @@ class RelocateJar extends DefaultTask {
                         return
                     }
                     // 忽略启用隔离类加载器
-                    if (path == "taboolib/common/env/SkipIsolatedClassLoader.class" && options.contains("enable-isolated-classloader")) {
+                    if (path == "taboolib/common/SkipIsolatedClassLoader.class" && options.contains("enable-isolated-classloader")) {
                         return
                     }
                     // 忽略依赖加载部分代码
