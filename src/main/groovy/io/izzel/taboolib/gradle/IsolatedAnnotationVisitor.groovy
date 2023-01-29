@@ -12,7 +12,7 @@ class IsolatedAnnotationVisitor extends AnnotationVisitor {
     TabooLibClassVisitor parent
 
     IsolatedAnnotationVisitor(AnnotationVisitor annotationVisitor, project, name, parent) {
-        super(Opcodes.ASM7, annotationVisitor)
+        super(Opcodes.ASM9, annotationVisitor)
         this.name = name
         this.project = project
         this.parent = parent
@@ -29,7 +29,7 @@ class IsolatedAnnotationVisitor extends AnnotationVisitor {
         IsolatedAnnotationVisitor parent
 
         IsolatedExcludeAnnotationVisitor(AnnotationVisitor annotationVisitor, parent) {
-            super(Opcodes.ASM7, annotationVisitor)
+            super(Opcodes.ASM9, annotationVisitor)
             this.parent = parent
         }
 

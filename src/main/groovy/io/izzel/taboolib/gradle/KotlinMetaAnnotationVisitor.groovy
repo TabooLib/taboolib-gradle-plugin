@@ -9,7 +9,7 @@ class KotlinMetaAnnotationVisitor extends AnnotationVisitor {
     Project project
 
     KotlinMetaAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
-        super(Opcodes.ASM7, annotationVisitor)
+        super(Opcodes.ASM9, annotationVisitor)
         this.project = project
     }
 

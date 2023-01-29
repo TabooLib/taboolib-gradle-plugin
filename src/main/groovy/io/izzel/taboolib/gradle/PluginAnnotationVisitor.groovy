@@ -9,7 +9,7 @@ class PluginAnnotationVisitor extends AnnotationVisitor {
     Project project
 
     PluginAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
-        super(Opcodes.ASM7, annotationVisitor)
+        super(Opcodes.ASM9, annotationVisitor)
         this.project = project
     }
 

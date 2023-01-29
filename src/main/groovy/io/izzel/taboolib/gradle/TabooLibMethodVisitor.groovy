@@ -8,7 +8,7 @@ class TabooLibMethodVisitor extends MethodVisitor {
     TabooLibClassVisitor classVisitor
 
     TabooLibMethodVisitor(MethodVisitor methodVisitor, TabooLibClassVisitor classVisitor) {
-        super(Opcodes.ASM7, methodVisitor)
+        super(Opcodes.ASM9, methodVisitor)
         this.classVisitor = classVisitor
     }
 

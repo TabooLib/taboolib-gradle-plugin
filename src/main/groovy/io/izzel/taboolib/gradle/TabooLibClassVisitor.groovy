@@ -25,7 +25,7 @@ class TabooLibClassVisitor extends ClassVisitor {
     ]
 
     TabooLibClassVisitor(ClassVisitor classVisitor, Project project, TabooLibExtension tabooExt) {
-        super(Opcodes.ASM7, classVisitor);
+        super(Opcodes.ASM9, classVisitor);
         this.project = project
         this.tabooExt = tabooExt
     }
