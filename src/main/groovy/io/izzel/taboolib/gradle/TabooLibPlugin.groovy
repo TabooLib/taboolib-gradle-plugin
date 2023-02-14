@@ -40,7 +40,7 @@ class TabooLibPlugin implements Plugin<Project> {
             tabooTask.configure { RelocateJar task ->
                 task.tabooExt = tabooExt
                 task.project = project
-                task.inJar = task.inJar ?: jarTask.archivePath
+                task.inJar = task.inJar ?: jarTask.archiveFile.get().getAsFile()
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
                 if (!tabooExt.options.contains("skip-taboolib-relocate")) {
