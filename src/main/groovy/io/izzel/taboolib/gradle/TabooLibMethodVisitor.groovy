@@ -89,7 +89,6 @@ class TabooLibMethodVisitor extends MethodVisitor {
 
     @Override
     void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        classVisitor.methodVisits.add(new MethodVisit(owner, name))
         super.visitMethodInsn(opcode, owner, name, descriptor, isInterface)
     }
 

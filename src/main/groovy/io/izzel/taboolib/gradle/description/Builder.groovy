@@ -16,7 +16,7 @@ abstract class Builder {
         def str = []
         str += ''
         str += ''
-        str += '#         Powered by TabooLib 6.0         #'
+        str += '#         Powered by TabooLib 6.1         #'
         str += ''
         str += ''
         return str

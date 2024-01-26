@@ -1,4 +1,5 @@
 plugins {
+    `maven-publish`
     id("groovy")
     id("maven-publish")
     id("java-gradle-plugin")
@@ -7,7 +8,7 @@ plugins {
 }
 
 group = "io.izzel.taboolib"
-version = "1.56"
+version = "2.0.0"
 
 configurations {
     create("embed") {
@@ -16,6 +17,7 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

@@ -9,7 +9,6 @@ class RelocateRemapper extends Remapper {
 
     Map<String, String> dot
     Map<String, String> slash
-    Map<String, Set<String>> use = new TreeMap()
     ClassRemapper remapper
 
     @Override
@@ -26,9 +25,6 @@ class RelocateRemapper extends Remapper {
     @SuppressWarnings('GroovyAccessibility')
     @Override
     String map(String internalName) {
-        if (remapper != null) {
-            use.computeIfAbsent(remapper.className) { new HashSet() }.add(internalName)
-        }
         if (internalName.startsWith('kotlin/Metadata')) {
             return internalName
         }
