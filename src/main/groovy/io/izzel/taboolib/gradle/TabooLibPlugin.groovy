@@ -24,7 +24,9 @@ class TabooLibPlugin implements Plugin<Project> {
         // 注册配置
         def taboo = project.configurations.maybeCreate('taboo')
         // 注册任务
-        def tabooTask = project.tasks.create('taboolibMainTask', TabooLIbMainTask)
+        def tabooTask = project.tasks.maybeCreate('taboolibMainTask', TabooLibMainTask)
+
+        // 添加依赖以及重定向配置
         project.afterEvaluate {
             project.configurations.compileClasspath.extendsFrom(taboo)
             // com.mojang:datafixerupper:4.0.26
@@ -37,7 +39,7 @@ class TabooLibPlugin implements Plugin<Project> {
             // subprojects
             tabooExt.env.modules.each {
                 def dep = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
-                if (isIncludeModule(it) && !tabooExt.subproject) {
+                if (project.hasProperty("api") || isIncludeModule(it) && !tabooExt.subproject) {
                     project.configurations.taboo.dependencies.add(dep)
                 } else {
                     project.configurations.compileOnly.dependencies.add(dep)
@@ -52,7 +54,7 @@ class TabooLibPlugin implements Plugin<Project> {
 
             def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project).replaceAll("[._-]", "")
             def jarTask = project.tasks.jar as Jar
-            tabooTask.configure { TabooLIbMainTask task ->
+            tabooTask.configure { TabooLibMainTask task ->
                 task.tabooExt = tabooExt
                 task.project = project
                 task.inJar = task.inJar ?: jarTask.archivePath

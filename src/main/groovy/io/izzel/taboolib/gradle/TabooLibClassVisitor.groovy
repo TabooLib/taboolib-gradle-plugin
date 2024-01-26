@@ -3,6 +3,7 @@ package io.izzel.taboolib.gradle
 import org.gradle.api.Project
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 class TabooLibClassVisitor extends ClassVisitor {
@@ -29,6 +30,12 @@ class TabooLibClassVisitor extends ClassVisitor {
     void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         this.name = name
         super.visit(version, access, name, signature, superName, interfaces)
+    }
+
+    @Override
+    MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+        if (project.hasProperty("api")) return new EmptyMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions))
+        return super.visitMethod(access, name, descriptor, signature, exceptions)
     }
 
     @Override

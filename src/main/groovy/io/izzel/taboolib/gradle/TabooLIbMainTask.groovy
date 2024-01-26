@@ -23,7 +23,7 @@ import java.util.jar.JarOutputStream
 import java.util.zip.ZipException
 
 @ToString
-class TabooLIbMainTask extends DefaultTask {
+class TabooLibMainTask extends DefaultTask {
 
     @InputFile
     File inJar
@@ -162,6 +162,6 @@ class TabooLIbMainTask extends DefaultTask {
 
     @Override
     String toString() {
-        return "RelocateJar{}";
+        return "TabooLibMainTask{}";
     }
 }
