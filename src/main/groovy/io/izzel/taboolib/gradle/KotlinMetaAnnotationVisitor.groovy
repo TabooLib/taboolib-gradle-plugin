@@ -16,7 +16,8 @@ class KotlinMetaAnnotationVisitor extends AnnotationVisitor {
     @Override
     void visit(String name, Object value) {
         if (value instanceof String) {
-            super.visit(name, value.replace("taboolib", "${project.group.replace('.', '/')}/taboolib"))
+            def group = project.group.toString().replace('.', '/')
+            super.visit(name, value.replace("Ltaboolib", "L$group/taboolib"))
         } else {
             super.visit(name, value)
         }

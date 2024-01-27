@@ -36,6 +36,9 @@ class TabooLibMainTask extends DefaultTask {
     String classifier
 
     @Input
+    boolean api;
+
+    @Input
     Project project
 
     @Input
@@ -72,7 +75,7 @@ class TabooLibMainTask extends DefaultTask {
                         if (path.endsWith(".class")) {
                             def reader = new ClassReader(it)
                             def writer = new ClassWriter(0)
-                            def visitor = new TabooLibClassVisitor(writer, project, tabooExt)
+                            def visitor = new TabooLibClassVisitor(writer, project, tabooExt, api)
                             def rem = new ClassRemapper(visitor, remapper)
                             remapper.remapper = rem
                             reader.accept(rem, 0)
@@ -121,6 +124,7 @@ class TabooLibMainTask extends DefaultTask {
                 null
             }
         }
+        // api mode
         Files.copy(tempOut1.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 

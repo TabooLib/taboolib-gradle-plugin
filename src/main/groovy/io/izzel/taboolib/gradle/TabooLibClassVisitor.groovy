@@ -14,16 +14,19 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     TabooLibExtension tabooExt
 
+    boolean api
+
     List<String> pluginAnnotations = [
             "Lorg/spongepowered/api/plugin/Plugin;",
             "Lorg/spongepowered/plugin/jvm/Plugin;",
             "Lcom/velocitypowered/api/plugin/Plugin;"
     ]
 
-    TabooLibClassVisitor(ClassVisitor classVisitor, Project project, TabooLibExtension tabooExt) {
+    TabooLibClassVisitor(ClassVisitor classVisitor, Project project, TabooLibExtension tabooExt, boolean api) {
         super(Opcodes.ASM9, classVisitor);
         this.project = project
         this.tabooExt = tabooExt
+        this.api = api
     }
 
     @Override
@@ -34,7 +37,7 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     @Override
     MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        if (project.hasProperty("api")) return new EmptyMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions))
+        if (hasProperty("DeleteCode")) return new EmptyMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions))
         return super.visitMethod(access, name, descriptor, signature, exceptions)
     }
 
@@ -45,7 +48,7 @@ class TabooLibClassVisitor extends ClassVisitor {
             return new PluginAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         }
         // Metadata
-        if (!tabooExt.options.contains("skip-taboolib-relocate") && descriptor == "Lkotlin/Metadata;") {
+        if (!tabooExt.version.skipTabooLibRelocate && descriptor == "Lkotlin/Metadata;") {
             return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
         }
         // 其他

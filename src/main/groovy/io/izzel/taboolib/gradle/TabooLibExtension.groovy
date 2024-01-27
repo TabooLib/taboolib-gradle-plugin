@@ -28,9 +28,6 @@ class TabooLibExtension {
     /** 重定向 */
     Map<String, String> relocation = new LinkedHashMap<>()
 
-    /** 设置 */
-    List<String> options = []
-
     /** 根包名 */
     String rootPackage = null
 

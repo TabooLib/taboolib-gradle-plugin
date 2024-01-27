@@ -25,6 +25,29 @@ class TabooLibPlugin implements Plugin<Project> {
         def taboo = project.configurations.maybeCreate('taboo')
         // 注册任务
         def tabooTask = project.tasks.maybeCreate('taboolibMainTask', TabooLibMainTask)
+        tabooTask.group = "taboolib"
+        // 注册任务 - 刷新依赖
+        project.tasks.maybeCreate('taboolibRefreshDependencies')
+        project.tasks.taboolibRefreshDependencies.group = "taboolib"
+        project.tasks.taboolibRefreshDependencies.doLast {
+            def taboolibFile = new File("../../caches/modules-2/files-2.1/io.izzel.taboolib").canonicalFile
+            taboolibFile.listFiles()?.each { module ->
+                def file = new File(taboolibFile, "${module.name}/${tabooExt.version.taboolib}")
+                if (file.exists()) {
+                    file.deleteDir()
+                    System.out.println("Delete $file")
+                }
+            }
+        }
+        // 注册任务 - 构建 API 版本
+        project.tasks.maybeCreate('taboolibBuildApi')
+        project.tasks.taboolibBuildApi.group = "taboolib"
+        project.tasks.taboolibBuildApi.dependsOn(project.tasks.build)
+        def api = false
+        try {
+            api = project.gradle.startParameter.taskRequests.args[0][0].toString() == "taboolibBuildApi"
+        } catch (Throwable ignored) {
+        }
 
         // 添加依赖以及重定向配置
         project.afterEvaluate {
@@ -39,7 +62,7 @@ class TabooLibPlugin implements Plugin<Project> {
             // subprojects
             tabooExt.env.modules.each {
                 def dep = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
-                if (project.hasProperty("api") || isIncludeModule(it) && !tabooExt.subproject) {
+                if (api || isIncludeModule(it) && !tabooExt.subproject) {
                     project.configurations.taboo.dependencies.add(dep)
                 } else {
                     project.configurations.compileOnly.dependencies.add(dep)
@@ -50,6 +73,9 @@ class TabooLibPlugin implements Plugin<Project> {
             project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
                 task.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                if (api) {
+                    task.getArchiveClassifier().set("api")
+                }
             }
 
             def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project).replaceAll("[._-]", "")
@@ -60,6 +86,7 @@ class TabooLibPlugin implements Plugin<Project> {
                 task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
+                task.api = api
 
                 // 重定向
                 if (!tabooExt.version.isSkipTabooLibRelocate()) {
