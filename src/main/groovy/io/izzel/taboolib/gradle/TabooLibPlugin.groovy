@@ -42,15 +42,16 @@ class TabooLibPlugin implements Plugin<Project> {
         // 注册任务 - 构建 API 版本
         project.tasks.maybeCreate('taboolibBuildApi')
         project.tasks.taboolibBuildApi.group = "taboolib"
-        project.tasks.taboolibBuildApi.dependsOn(project.tasks.build)
-        def api = false
-        try {
-            api = project.gradle.startParameter.taskRequests.args[0][0].toString() == "taboolibBuildApi"
-        } catch (Throwable ignored) {
-        }
 
         // 添加依赖以及重定向配置
         project.afterEvaluate {
+            def api = false
+            try {
+                project.tasks.taboolibBuildApi.dependsOn(project.tasks.build)
+                api = project.gradle.startParameter.taskRequests.args[0][0].toString() == "taboolibBuildApi"
+            } catch (Throwable ignored) {
+            }
+
             project.configurations.compileClasspath.extendsFrom(taboo)
             // com.mojang:datafixerupper:4.0.26
             project.dependencies.add('compileOnly', 'com.mojang:datafixerupper:4.0.26')
