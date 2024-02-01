@@ -7,17 +7,23 @@ import org.objectweb.asm.Opcodes
 class KotlinMetaAnnotationVisitor extends AnnotationVisitor {
 
     Project project
+    TabooLibExtension tabooExt
 
-    KotlinMetaAnnotationVisitor(AnnotationVisitor annotationVisitor, project) {
+    KotlinMetaAnnotationVisitor(AnnotationVisitor annotationVisitor, project, tabooExt) {
         super(Opcodes.ASM9, annotationVisitor)
         this.project = project
+        this.tabooExt = tabooExt
     }
 
     @Override
     void visit(String name, Object value) {
         if (value instanceof String) {
             def group = project.group.toString().replace('.', '/')
-            super.visit(name, value.replace("Ltaboolib", "L$group/taboolib"))
+            def rep = value.replace("Ltaboolib", "L$group/taboolib")
+            tabooExt.relocation.each { k, v ->
+                rep = rep.replace("L${k.replace('.', '/')}", "L${v.replace('.', '/')}")
+            }
+            super.visit(name, rep)
         } else {
             super.visit(name, value)
         }
@@ -25,6 +31,6 @@ class KotlinMetaAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     AnnotationVisitor visitArray(String name) {
-        return new KotlinMetaAnnotationVisitor(super.visitArray(name), project)
+        return new KotlinMetaAnnotationVisitor(super.visitArray(name), project, tabooExt)
     }
 }

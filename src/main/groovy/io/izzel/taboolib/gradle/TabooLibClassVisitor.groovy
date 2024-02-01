@@ -37,7 +37,7 @@ class TabooLibClassVisitor extends ClassVisitor {
 
     @Override
     MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        if (hasProperty("DeleteCode")) return new EmptyMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions))
+        if (project.hasProperty("DeleteCode")) return new EmptyMethodVisitor(super.visitMethod(access, name, descriptor, signature, exceptions))
         return super.visitMethod(access, name, descriptor, signature, exceptions)
     }
 
@@ -49,7 +49,7 @@ class TabooLibClassVisitor extends ClassVisitor {
         }
         // Metadata
         if (!tabooExt.version.skipTabooLibRelocate && descriptor == "Lkotlin/Metadata;") {
-            return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project)
+            return new KotlinMetaAnnotationVisitor(super.visitAnnotation(descriptor, visible), project, tabooExt)
         }
         // 其他
         return super.visitAnnotation(descriptor, visible)

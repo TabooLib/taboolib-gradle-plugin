@@ -1,6 +1,5 @@
 package io.izzel.taboolib.gradle
 
-import kotlin.jvm.internal.Intrinsics
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 import org.objectweb.asm.Handle
@@ -39,7 +38,6 @@ class EmptyMethodVisitor extends MethodVisitor {
     }
 
     void visitTableSwitchInsn(final int min, final int max, @Nullable final Label dflt, @NotNull final Label... labels) {
-        Intrinsics.checkNotNullParameter((Object) labels, "labels")
     }
 
     void visitLookupSwitchInsn(@Nullable final Label dflt, @Nullable final int[] keys, @Nullable final Label[] labels) {
