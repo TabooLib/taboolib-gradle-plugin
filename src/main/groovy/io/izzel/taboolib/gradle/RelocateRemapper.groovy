@@ -11,6 +11,19 @@ class RelocateRemapper extends Remapper {
     Map<String, String> slash
     ClassRemapper remapper
 
+    List<String> skipKotlinAnnotations = [
+            "kotlin/annotation/Repeatable",
+            "kotlin/annotation/Retention",
+            "kotlin/annotation/Target",
+            "kotlin/jvm/JvmField",
+            "kotlin/jvm/JvmInline",
+            "kotlin/jvm/JvmStatic",
+            "kotlin/jvm/PurelyImplements",
+            "kotlin/Metadata",
+            "kotlin/Deprecated",
+            "kotlin/ReplaceWith",
+    ]
+
     @Override
     Object mapValue(Object value) {
         if (value instanceof String) {
@@ -25,7 +38,7 @@ class RelocateRemapper extends Remapper {
     @SuppressWarnings('GroovyAccessibility')
     @Override
     String map(String internalName) {
-        if (internalName.startsWith('kotlin/Metadata')) {
+        if (skipKotlinAnnotations.any { internalName.startsWith(it) }) {
             return internalName
         }
         def match = slash.find { internalName.startsWith(it.key) }
