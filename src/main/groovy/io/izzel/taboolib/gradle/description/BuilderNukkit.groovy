@@ -1,14 +1,21 @@
 package io.izzel.taboolib.gradle.description
 
+import io.izzel.taboolib.gradle.TabooLibExtension
 import org.gradle.api.Project
 
 class BuilderNukkit extends Builder {
 
     @Override
-    byte[] build(Description description, Project project) {
+    byte[] build(Description description, Project project, TabooLibExtension tabooLibExt) {
         def body = startBukkitFile()
         body += "name: ${description.name ?: project.name}"
-        body += "main: ${project.group}.taboolib.platform.NukkitPlugin"
+
+        if (tabooLibExt.version.skipTabooLibRelocate) {
+            body += "main: taboolib.platform.NukkitPlugin"
+        } else {
+            body += "main: ${project.group}.taboolib.platform.NukkitPlugin"
+        }
+
         body += "version: ${project.version}"
         write(body, description.lin.links['homepage'], 'website')
         writeLine(body)

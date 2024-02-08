@@ -2,6 +2,7 @@ package io.izzel.taboolib.gradle.description
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import io.izzel.taboolib.gradle.TabooLibExtension
 import org.gradle.api.Project
 
 /**
@@ -12,11 +13,17 @@ import org.gradle.api.Project
  */
 class BuilderCloudNetV3 extends Builder {
     @Override
-    byte[] build(Description description, Project project) {
+    byte[] build(Description description, Project project, TabooLibExtension tabooLibExt) {
         def info = new JsonObject()
         info.addProperty('group', project.group.toString())
         info.addProperty('name', description.name ?: project.name)
-        info.addProperty('main', "${project.group}.taboolib.platform.CloudNetV3Plugin")
+
+        if (tabooLibExt.version.skipTabooLibRelocate) {
+            info.addProperty('main', "taboolib.platform.CloudNetV3Plugin")
+        } else {
+            info.addProperty('main', "${project.group}.taboolib.platform.CloudNetV3Plugin")
+        }
+
         info.addProperty('version', project.version.toString())
         // authors
         def con = description.con.contributors.collect { it.name }

@@ -116,7 +116,7 @@ class TabooLibMainTask extends DefaultTask {
                     if (tabooExt.env.modules.contains(it.module)) {
                         try {
                             out.putNextEntry(new JarEntry(it.file))
-                            out.write(it.builder.build(tabooExt.des, project))
+                            out.write(it.builder.build(tabooExt.des, project, tabooExt))
                         } catch (ZipException ignored) {
                         }
                     }

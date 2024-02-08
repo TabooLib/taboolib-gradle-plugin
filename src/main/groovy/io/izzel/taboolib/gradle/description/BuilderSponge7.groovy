@@ -2,12 +2,13 @@ package io.izzel.taboolib.gradle.description
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import io.izzel.taboolib.gradle.TabooLibExtension
 import org.gradle.api.Project
 
 class BuilderSponge7 extends Builder {
 
     @Override
-    byte[] build(Description description, Project project) {
+    byte[] build(Description description, Project project, TabooLibExtension tabooLibExt) {
         def json = new JsonArray()
         def info = new JsonObject()
         info.addProperty('modid', project.name.toLowerCase())
