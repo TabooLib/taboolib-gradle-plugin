@@ -24,14 +24,16 @@ class BuilderVelocity extends Builder {
         def con = description.con.contributors.collect { it.name }
         writeList(info, con, 'authors')
         // dependencies
-        def dependencies = new JsonArray()
-        description.dep.dependencies.forEach(dep -> {
-            def dependency = new JsonObject()
-            dependency.addProperty('id', dep.name)
-            dependency.addProperty('optional', dep.optional)
-            dependencies.add(dependency)
-        })
-        info.add('dependencies', dependencies)
+        if (description.dep.dependencies.size() > 0) {
+            def dependencies = new JsonArray()
+            description.dep.dependencies.findAll { it.with == null || it.with.equalsIgnoreCase('velocity') }.each { dep ->
+                def dependency = new JsonObject()
+                dependency.addProperty('id', dep.name)
+                dependency.addProperty('optional', dep.optional)
+                dependencies.add(dependency)
+            }
+            info.add('dependencies', dependencies)
+        }
         return bytes(info)
     }
 }

@@ -80,7 +80,6 @@ class TabooLibPlugin implements Plugin<Project> {
             }
 
             def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project).replaceAll("[._-]", "")
-            def coroutinesVersion = tabooExt.version.coroutines.replaceAll("[._-]", "")
 
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { TabooLibMainTask task ->
@@ -98,7 +97,10 @@ class TabooLibPlugin implements Plugin<Project> {
                 }
                 if (!tabooExt.version.isSkipKotlinRelocate()) {
                     task.relocations['kotlin.'] = 'kotlin' + kotlinVersion + '.'
-                    task.relocations['kotlinx.coroutines.'] = 'kotlinx.coroutines' + coroutinesVersion + '.'
+                    if (tabooExt.version.coroutines != null) {
+                        def coroutinesVersion = tabooExt.version.coroutines.replaceAll("[._-]", "")
+                        task.relocations['kotlinx.coroutines.'] = 'kotlinx.coroutines' + coroutinesVersion + '.'
+                    }
                 }
             }
         }
