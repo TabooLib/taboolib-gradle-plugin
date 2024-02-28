@@ -24,13 +24,15 @@ abstract class Builder {
     }
 
     static def writeLine(body) {
-        body.add("")
+        // body.add("")
     }
 
-    static def write(List<String> body, data, key) {
+    static boolean write(List<String> body, data, key) {
         if (data != null) {
             body.add("$key: $data")
+            return true
         }
+        return false
     }
 
     static def write(JsonObject body, data, key) {
@@ -39,18 +41,21 @@ abstract class Builder {
         }
     }
 
-    static def writeList(List<String> body, data, key) {
+    static boolean writeList(List<String> body, data, key) {
         if (data instanceof List<String>) {
             if (data.size() > 0) {
                 body.add("$key:")
                 for (i in data) {
                     body.add("  - '${i}'")
                 }
+                return true
             }
         } else if (data != null) {
             body.add("$key:")
             body.add("  - '${data}'")
+            return true
         }
+        return false
     }
 
     static def writeList(JsonObject body, data, key) {

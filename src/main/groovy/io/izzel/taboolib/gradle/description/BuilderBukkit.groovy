@@ -5,6 +5,7 @@ import org.gradle.api.Project
 
 class BuilderBukkit extends Builder {
 
+    @SuppressWarnings('GroovyAssignabilityCheck')
     @Override
     byte[] build(Description description, Project project, TabooLibExtension tabooLibExt) {
         def body = startBukkitFile()
@@ -18,11 +19,11 @@ class BuilderBukkit extends Builder {
 
         body += "version: ${project.version}"
         write(body, description.lin.links['homepage'], 'website')
-        writeLine(body)
+
         // authors
         def con = description.con.contributors.collect { it.name }
         writeList(body, con, 'authors')
-        writeLine(body)
+
         // dependency
         writeList(body, description.dep.dependencies
                 .findAll { it.with == null || it.with.equalsIgnoreCase('bukkit') }
@@ -36,7 +37,7 @@ class BuilderBukkit extends Builder {
                 .findAll { it.with == null || it.with.equalsIgnoreCase('bukkit') }
                 .findAll { it.loadbefore }
                 .collect { it.name }, 'loadbefore')
-        writeLine(body)
+
         // custom nodes
         description.bukkitNodes.each {
             if (it.value instanceof List) {
@@ -45,6 +46,9 @@ class BuilderBukkit extends Builder {
                 write(body, it.value, it.key)
             }
         }
+
+        // Folia
+        body += "folia-supported: true"
         return bytes(body)
     }
 }
