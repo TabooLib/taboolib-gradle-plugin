@@ -107,6 +107,6 @@ class TabooLibPlugin implements Plugin<Project> {
     }
 
     static def isIncludeModule(String module) {
-        return module == "common" || Platforms.values().any { p -> p.module == module }
+        return module == "common" || module == "platform-application" || Platforms.values().any { p -> p.module == module }
     }
 }

@@ -48,6 +48,8 @@ const val EXPANSION_PTC = "expansion-persistent-container"
 
 const val EXPANSION_PTC_OBJECT = "expansion-persistent-container-object"
 
+const val EXPANSION_JEXL = "expansion-jexl"
+
 const val APPLICATION = "platform-application"
 
 const val BUKKIT = "platform-bukkit"
