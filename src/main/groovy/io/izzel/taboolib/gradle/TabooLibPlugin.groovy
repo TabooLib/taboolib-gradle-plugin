@@ -99,7 +99,7 @@ class TabooLibPlugin implements Plugin<Project> {
                     task.relocations['kotlin.'] = 'kotlin' + kotlinVersion + '.'
                     if (tabooExt.version.coroutines != null) {
                         def coroutinesVersion = tabooExt.version.coroutines.replaceAll("[._-]", "")
-                        task.relocations['kotlinx.coroutines.'] = 'kotlinx.coroutines' + coroutinesVersion + '.'
+                        task.relocations['kotlinx.coroutines.'] = 'kotlin' + kotlinVersion + 'x.coroutines' + coroutinesVersion + '.'
                     }
                 }
             }

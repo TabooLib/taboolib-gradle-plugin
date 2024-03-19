@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "io.izzel.taboolib"
-version = "2.0.9"
+version = "2.0.10"
 
 configurations {
     create("embed") {
