@@ -13,7 +13,7 @@ class Env {
     String repoCentral = "https://maven.aliyun.com/repository/central"
 
     /** TabooLib 仓库地址 */
-    String repoTabooLib = "http://ptms.ink:8081/repository/releases"
+    String repoTabooLib = "http://sacredcraft.cn:8081/repository/releases"
 
     /** Library 文件 */
     String fileLibs = "libraries"
