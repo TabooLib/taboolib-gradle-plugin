@@ -11,7 +11,7 @@ class TabooLibPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.repositories.maven {
-            url project.uri("http://ptms.ink:8081/repository/releases/")
+            url project.uri("http://sacredcraft.cn:8081/repository/releases/")
             allowInsecureProtocol true
         }
         project.repositories.maven {
