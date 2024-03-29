@@ -66,6 +66,8 @@ const val BUNGEE = "platform-bungee"
 
 const val VELOCITY = "platform-velocity"
 
+const val AFYBROKER = "platform-afybroker"
+
 /** Bukkit 完整模块 */
 val BUKKIT_ALL = arrayOf(BUKKIT, BUKKIT_HOOK, BUKKIT_UTIL, BUKKIT_XSERIES)
 
