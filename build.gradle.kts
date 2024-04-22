@@ -28,7 +28,7 @@ dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     "embed"("org.ow2.asm:asm:9.3")
     "embed"("org.ow2.asm:asm-commons:9.3")
-    "embed"("com.google.code.gson:gson:2.9.0")
+    "embed"("com.google.code.gson:gson:2.10.1")
     "embed"(kotlin("stdlib"))
 }
 
