@@ -52,6 +52,8 @@ const val EXPANSION_JEXL = "expansion-jexl"
 
 const val EXPANSION_FOLIA = "expansion-folia"
 
+const val EXPANSION_LETTUCE_REDIS = "expansion-lettuce-redis"
+
 const val APPLICATION = "platform-application"
 
 const val BUKKIT = "platform-bukkit"
