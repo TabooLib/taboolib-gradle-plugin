@@ -14,7 +14,9 @@ enum Platforms {
 
     SPONGE7('Sponge7', 'platform-sponge-api7', 'mcmod.info', new BuilderSponge7()),
 
-    SPONGE8('Sponge8', 'platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8());
+    SPONGE8('Sponge8', 'platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8()),
+
+    AFYBROKER("AfyBroker","platform-afybroker","broker.yml",new BuilderAfyBroker());
 
     String key
     String module
