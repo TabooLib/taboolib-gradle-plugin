@@ -36,8 +36,6 @@ const val EXPANSION_IOC = "expansion-ioc"
 
 const val EXPANSION_JAVASCRIPT = "expansion-javascript"
 
-const val EXPANSION_LANG_TOOL = "expansion-lang-tool"
-
 const val EXPANSION_PLAYER_DATABASE = "expansion-player-database"
 
 const val EXPANSION_PLAYER_FAKE_OP = "expansion-player-fake-op"
