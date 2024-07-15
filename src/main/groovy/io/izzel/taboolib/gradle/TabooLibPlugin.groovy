@@ -52,12 +52,14 @@ class TabooLibPlugin implements Plugin<Project> {
             } catch (Throwable ignored) {
             }
 
-            project.configurations.compileClasspath.extendsFrom(taboo)
+            // 继承 "taboo" 配置
+            project.configurations.implementation.extendsFrom(taboo)
+
             // com.mojang:datafixerupper:4.0.26
-            project.dependencies.add('compileOnly', 'com.mojang:datafixerupper:4.0.26')
+            project.dependencies.add('implementation', 'com.mojang:datafixerupper:4.0.26')
             // org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
             if (tabooExt.version.coroutines != null) {
-                project.dependencies.add('compileOnly', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
+                project.dependencies.add('implementation', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
             }
 
             // subprojects
@@ -66,13 +68,21 @@ class TabooLibPlugin implements Plugin<Project> {
                 if (api || isIncludeModule(it) && !tabooExt.subproject) {
                     project.configurations.taboo.dependencies.add(dep)
                 } else {
-                    project.configurations.compileOnly.dependencies.add(dep)
+                    project.configurations.implementation.dependencies.add(dep)
                 }
             }
 
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
-                task.from(taboo.collect { it.isDirectory() ? it : project.zipTree(it) })
+                task.from(taboo.collect {
+                    if (it.isDirectory()) {
+                        it
+                    } else if (it.name.endsWith(".jar")) {
+                        project.zipTree(it)
+                    } else {
+                        project.files(it)
+                    }
+                })
                 task.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
                 if (api) {
                     task.getArchiveClassifier().set("api")
