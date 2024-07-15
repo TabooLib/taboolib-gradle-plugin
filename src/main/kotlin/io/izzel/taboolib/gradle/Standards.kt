@@ -36,8 +36,6 @@ const val EXPANSION_IOC = "expansion-ioc"
 
 const val EXPANSION_JAVASCRIPT = "expansion-javascript"
 
-const val EXPANSION_LANG_TOOL = "expansion-lang-tool"
-
 const val EXPANSION_PLAYER_DATABASE = "expansion-player-database"
 
 const val EXPANSION_PLAYER_FAKE_OP = "expansion-player-fake-op"
@@ -67,6 +65,8 @@ const val BUKKIT_XSERIES = "module-bukkit-xseries"
 const val BUNGEE = "platform-bungee"
 
 const val VELOCITY = "platform-velocity"
+
+const val AFYBROKER = "platform-afybroker"
 
 /** Bukkit 完整模块 */
 val BUKKIT_ALL = arrayOf(BUKKIT, BUKKIT_HOOK, BUKKIT_UTIL, BUKKIT_XSERIES)
