@@ -19,10 +19,9 @@ class TabooLibPlugin implements Plugin<Project> {
         project.repositories.maven {
             url project.uri("https://repo.spongepowered.org/maven")
         }
+
         // 注册扩展
         def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
-        // 注册配置
-        def taboo = project.configurations.maybeCreate('taboo')
         // 注册任务
         def tabooTask = project.tasks.maybeCreate('taboolibMainTask', TabooLibMainTask)
         tabooTask.group = "taboolib"
@@ -43,6 +42,11 @@ class TabooLibPlugin implements Plugin<Project> {
         project.tasks.maybeCreate('taboolibBuildApi')
         project.tasks.taboolibBuildApi.group = "taboolib"
 
+        // 注册配置
+        def taboo = project.configurations.maybeCreate('taboo')     // 这个名字起的着实二逼
+        def include = project.configurations.maybeCreate('include') // 这个代替 "taboo"
+        def dynamic = project.configurations.maybeCreate('dynamic') // 这个还没做完
+
         // 添加依赖以及重定向配置
         project.afterEvaluate {
             def api = false
@@ -52,23 +56,28 @@ class TabooLibPlugin implements Plugin<Project> {
             } catch (Throwable ignored) {
             }
 
-            // 继承 "taboo" 配置
+            // 继承 "taboo", "include" 配置
             project.configurations.implementation.extendsFrom(taboo)
+            project.configurations.implementation.extendsFrom(include)
+            // 继承 "dynamic" 配置
+            project.configurations.compileOnly.extendsFrom(dynamic)
+            project.configurations.testImplementation.extendsFrom(dynamic)
 
-            // com.mojang:datafixerupper:4.0.26
-            project.dependencies.add('implementation', 'com.mojang:datafixerupper:4.0.26')
-            // org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
+            // 自动引入 com.mojang:datafixerupper:4.0.26
+            project.dependencies.add('compileOnly', 'com.mojang:datafixerupper:4.0.26')
+            // 自动引入 org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
             if (tabooExt.version.coroutines != null) {
-                project.dependencies.add('implementation', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
+                project.dependencies.add('compileOnly', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
+                project.dependencies.add('testImplementation', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
             }
-
-            // subprojects
+            // 自动引入 TabooLib 模块
             tabooExt.env.modules.each {
-                def dep = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
-                if (api || isIncludeModule(it) && !tabooExt.subproject) {
-                    project.configurations.taboo.dependencies.add(dep)
+                def dependency = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
+                if (api || isCoreModule(it) && !tabooExt.subproject) {
+                    project.configurations.include.dependencies.add(dependency)
                 } else {
-                    project.configurations.implementation.dependencies.add(dep)
+                    project.configurations.compileOnly.dependencies.add(dependency)
+                    project.configurations.testImplementation.dependencies.add(dependency)
                 }
             }
 
@@ -90,7 +99,6 @@ class TabooLibPlugin implements Plugin<Project> {
             }
 
             def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project).replaceAll("[._-]", "")
-
             def jarTask = project.tasks.jar as Jar
             tabooTask.configure { TabooLibMainTask task ->
                 task.tabooExt = tabooExt
@@ -116,7 +124,10 @@ class TabooLibPlugin implements Plugin<Project> {
         }
     }
 
-    static def isIncludeModule(String module) {
+    /**
+     * 是否为必要模块
+     */
+    static def isCoreModule(String module) {
         return module == "common" || module == "platform-application" || Platforms.values().any { p -> p.module == module }
     }
 }
