@@ -132,7 +132,7 @@ class TabooLibMainTask extends DefaultTask {
         def modules = new HashSet<String>(tabooExt.env.modules)
         // 平台实现
         Platforms.values().each { p ->
-            if (p.module in modules) {
+            if (p.module in modules && p.hasImpl) {
                 modules += p.module + "-impl"
             }
         }

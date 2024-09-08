@@ -16,17 +16,27 @@ enum Platforms {
 
     SPONGE8('Sponge8', 'platform-sponge-api8', 'META-INF/plugins.json', new BuilderSponge8()),
 
-    AFYBROKER("AfyBroker","platform-afybroker","broker.yml",new BuilderAfyBroker());
+    AFYBROKER("AfyBroker", "platform-afybroker", "broker.yml", new BuilderAfyBroker(), false);
 
     String key
     String module
     String file
     Builder builder
+    boolean hasImpl
 
     Platforms(key, module, file, builder) {
         this.key = key
         this.module = module
         this.file = file
         this.builder = builder
+        this.hasImpl = true
+    }
+
+    Platforms(String key, String module, String file, Builder builder, boolean hasImpl) {
+        this.key = key
+        this.module = module
+        this.file = file
+        this.builder = builder
+        this.hasImpl = hasImpl
     }
 }
