@@ -66,7 +66,7 @@ val XSeries = arrayOf(
 /**
  * XSeries（XSkull 及 ItemBuilder）
  */
-val BukkitXSeriesItem = arrayOf(
+val XSeriesItem = arrayOf(
     "bukkit-xseries",
     "bukkit-xseries-item",
 )
@@ -237,7 +237,7 @@ val Porticus = arrayOf(
 /**
  * Javascript 脚本环境
  */
-val Javascript = arrayOf("script-javascript")
+val JavaScript = arrayOf("script-javascript")
 
 /**
  * Jexl 脚本环境

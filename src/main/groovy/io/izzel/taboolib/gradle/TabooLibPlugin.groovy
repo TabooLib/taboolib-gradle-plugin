@@ -74,7 +74,7 @@ class TabooLibPlugin implements Plugin<Project> {
             tabooExt.env.modules.each {
                 def dependency = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
                 if (api || isCoreModule(it) && !tabooExt.subproject) {
-                    project.configurations.include.dependencies.add(dependency)
+                    project.configurations.taboo.dependencies.add(dependency)
                 } else {
                     project.configurations.compileOnly.dependencies.add(dependency)
                     project.configurations.testImplementation.dependencies.add(dependency)
@@ -83,7 +83,7 @@ class TabooLibPlugin implements Plugin<Project> {
 
             project.tasks.jar.finalizedBy(tabooTask)
             project.tasks.jar.configure { Jar task ->
-                task.from(taboo.collect {
+                task.from(taboo.collect { // 在这里打包 "taboo" 依赖
                     if (it.isDirectory()) {
                         it
                     } else if (it.name.endsWith(".jar")) {
