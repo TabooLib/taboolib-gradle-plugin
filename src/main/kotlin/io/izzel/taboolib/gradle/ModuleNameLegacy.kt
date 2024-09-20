@@ -49,7 +49,7 @@ val NAVIGATION = arrayOf("bukkit-navigation", NMS)
 val UI = arrayOf("bukkit-ui", "bukkit-ui-12100", "bukkit-ui-legacy", CHAT, NMS)
 
 @Deprecated("请使用 XSeries", replaceWith = ReplaceWith("XSeries"))
-val BUKKIT_XSERIES = arrayOf("bukkit-xseries", "bukkit-xseries-item")
+val BUKKIT_XSERIES = arrayOf("bukkit-xseries")
 
 @Deprecated("请使用 BukkitFakeOp", replaceWith = ReplaceWith("BukkitFakeOp"))
 const val EXPANSION_PLAYER_FAKE_OP = "bukkit-fake-op"

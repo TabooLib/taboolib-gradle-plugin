@@ -40,7 +40,6 @@ val BukkitUI = arrayOf(
     "bukkit-ui-legacy",
     "bukkit-util",
     "bukkit-xseries",
-    "bukkit-xseries-item",
     "bukkit-nms",
     "minecraft-chat",
 )
@@ -61,14 +60,6 @@ val BukkitUtil = arrayOf(
  */
 val XSeries = arrayOf(
     "bukkit-xseries",
-)
-
-/**
- * XSeries（XSkull 及 ItemBuilder）
- */
-val XSeriesItem = arrayOf(
-    "bukkit-xseries",
-    "bukkit-xseries-item",
 )
 
 /**
