@@ -13,7 +13,7 @@ class BuilderAfyBroker extends Builder {
         if (tabooLibExt.version.skipTabooLibRelocate) {
             body += "main: taboolib.platform.AfyBrokerPlugin"
         } else {
-            body += "main: ${project.group}.taboolib.platform.BungeePlugin"
+            body += "main: ${project.group}.taboolib.platform.AfyBrokerPlugin"
         }
 
         body += "version: ${project.version}"
