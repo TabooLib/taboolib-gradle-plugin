@@ -45,7 +45,6 @@ class TabooLibPlugin implements Plugin<Project> {
         // 注册配置
         def taboo = project.configurations.maybeCreate('taboo')     // 这个名字起的着实二逼
         def include = project.configurations.maybeCreate('include') // 这个代替 "taboo"
-        def dynamic = project.configurations.maybeCreate('dynamic') // 这个还没做完
 
         // 添加依赖以及重定向配置
         project.afterEvaluate {
@@ -59,9 +58,6 @@ class TabooLibPlugin implements Plugin<Project> {
             // 继承 "taboo", "include" 配置
             project.configurations.implementation.extendsFrom(taboo)
             project.configurations.implementation.extendsFrom(include)
-            // 继承 "dynamic" 配置
-            project.configurations.compileOnly.extendsFrom(dynamic)
-            project.configurations.testImplementation.extendsFrom(dynamic)
 
             // 自动引入 com.mojang:datafixerupper:4.0.26
             project.dependencies.add('compileOnly', 'com.mojang:datafixerupper:4.0.26')

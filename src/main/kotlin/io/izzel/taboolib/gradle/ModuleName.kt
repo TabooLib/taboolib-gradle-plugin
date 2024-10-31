@@ -79,8 +79,7 @@ val BukkitNMSUtil = arrayOf(
     "bukkit-nms-tag-12005",
     "bukkit-nms-tag-legacy",
     "bukkit-nms",
-    *BukkitUtil,
-)
+) + BukkitUtil
 
 /**
  * Bukkit NMS ItemTag 工具
@@ -120,7 +119,7 @@ val Database = arrayOf(
 /**
  * Alkaid Redis
  */
-val DatabaseAlkaidRedis = arrayOf(
+val AlkaidRedis = arrayOf(
     "database-alkaid-redis",
     "basic-configuration",
 )
@@ -128,15 +127,20 @@ val DatabaseAlkaidRedis = arrayOf(
 /**
  * IOC
  */
-val DatabaseIoc = arrayOf(
+val IOC = arrayOf(
     "database-ioc",
     "basic-configuration",
 )
 
 /**
+ * ORM
+ */
+val ORM = arrayOf("database-orm") + Database
+
+/**
  * Lettuce Redis
  */
-val DatabaseLettuceRedis = arrayOf(
+val LettuceRedis = arrayOf(
     "database-lettuce-redis",
     "basic-configuration",
 )
@@ -144,26 +148,22 @@ val DatabaseLettuceRedis = arrayOf(
 /**
  * 玩家数据库
  */
-val DatabasePlayer = arrayOf(
-    "database-player",
-    *Database
-)
+val DatabasePlayer = arrayOf("database-player") + Database
+
+/**
+ * 玩家 Redis 数据库
+ */
+val DatabasePlayerRedis = arrayOf("database-player-redis") + DatabasePlayer + AlkaidRedis
 
 /**
  * Persistent Container
  */
-val DatabasePtc = arrayOf(
-    "database-ptc",
-    *Database
-)
+val Ptc = arrayOf("database-ptc") + Database
 
 /**
  * Persistent Container With Object
  */
-val DatabasePtcObject = arrayOf(
-    "database-ptc-object",
-    *Database
-)
+val PtcObject = arrayOf("database-ptc-object") + Database
 
 /**
  * Minecraft 文本工具
