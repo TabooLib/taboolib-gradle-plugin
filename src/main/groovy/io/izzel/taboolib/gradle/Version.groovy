@@ -1,15 +1,17 @@
 package io.izzel.taboolib.gradle
 
-import org.jetbrains.annotations.NotNull
+
 import org.jetbrains.annotations.Nullable
 
 class Version {
 
     /** Coroutines 版本 */
-    @Nullable String coroutines = "1.7.3"
+    @Nullable
+    String coroutines = "1.7.3"
 
     /** TabooLib 版本 */
-    @NotNull String taboolib = "6.1.0-dev"
+    @Nullable
+    String taboolib = null
 
     /** 跳过 Kotlin */
     boolean skipKotlin = false
@@ -19,4 +21,10 @@ class Version {
 
     /** 跳过 TabooLib 重定向 */
     boolean skipTabooLibRelocate = false
+
+    /** 跳过版本描述文件 */
+    boolean skipVersionFile = false
+
+    /** 跳过平台描述文件 */
+    boolean skipPlatformFile = false
 }

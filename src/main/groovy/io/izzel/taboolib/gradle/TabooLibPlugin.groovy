@@ -67,13 +67,15 @@ class TabooLibPlugin implements Plugin<Project> {
                 project.dependencies.add('testImplementation', 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + tabooExt.version.coroutines)
             }
             // 自动引入 TabooLib 模块
-            tabooExt.env.modules.each {
-                def dependency = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
-                if (api || isCoreModule(it) && !tabooExt.subproject) {
-                    project.configurations.taboo.dependencies.add(dependency)
-                } else {
-                    project.configurations.compileOnly.dependencies.add(dependency)
-                    project.configurations.testImplementation.dependencies.add(dependency)
+            if (tabooExt.version.taboolib != null) {
+                tabooExt.env.modules.each {
+                    def dependency = project.dependencies.create("io.izzel.taboolib:${it}:${tabooExt.version.taboolib}")
+                    if (api || isCoreModule(it) && !tabooExt.subproject) {
+                        project.configurations.taboo.dependencies.add(dependency)
+                    } else {
+                        project.configurations.compileOnly.dependencies.add(dependency)
+                        project.configurations.testImplementation.dependencies.add(dependency)
+                    }
                 }
             }
 

@@ -104,27 +104,30 @@ class TabooLibMainTask extends DefaultTask {
                 }
                 // endregion
                 // 描述文件
-                try {
-                    out.putNextEntry(new JarEntry("META-INF/taboolib/env.properties"))
-                    out.write(buildEnv())
-                    out.putNextEntry(new JarEntry("META-INF/taboolib/version.properties"))
-                    out.write(buildVersion())
-                } catch (ZipException ignored) {
+                if (!tabooExt.version.skipVersionFile) {
+                    try {
+                        out.putNextEntry(new JarEntry("META-INF/taboolib/env.properties"))
+                        out.write(buildEnv())
+                        out.putNextEntry(new JarEntry("META-INF/taboolib/version.properties"))
+                        out.write(buildVersion())
+                    } catch (ZipException ignored) {
+                    }
                 }
                 // 插件文件
-                Platforms.values().each {
-                    if (tabooExt.env.modules.contains(it.module)) {
-                        try {
-                            out.putNextEntry(new JarEntry(it.file))
-                            out.write(it.builder.build(tabooExt.des, project, tabooExt))
-                        } catch (ZipException ignored) {
+                if (!tabooExt.version.skipPlatformFile) {
+                    Platforms.values().each {
+                        if (tabooExt.env.modules.contains(it.module)) {
+                            try {
+                                out.putNextEntry(new JarEntry(it.file))
+                                out.write(it.builder.build(tabooExt.des, project, tabooExt))
+                            } catch (ZipException ignored) {
+                            }
                         }
                     }
                 }
                 null
             }
         }
-        // api mode
         Files.copy(tempOut1.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
