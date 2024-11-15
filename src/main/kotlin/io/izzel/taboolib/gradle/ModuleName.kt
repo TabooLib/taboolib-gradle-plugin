@@ -97,6 +97,8 @@ val BukkitNMSItemTag = arrayOf(
  */
 val BukkitNMSDataSerializer = arrayOf(
     "bukkit-nms-data-serializer",
+    "nms-data-serializer-12005",
+    "nms-data-serializer-legacy",
     "bukkit-nms"
 )
 
@@ -131,11 +133,6 @@ val IOC = arrayOf(
     "database-ioc",
     "basic-configuration",
 )
-
-/**
- * ORM
- */
-val ORM = arrayOf("database-orm") + Database
 
 /**
  * Lettuce Redis
