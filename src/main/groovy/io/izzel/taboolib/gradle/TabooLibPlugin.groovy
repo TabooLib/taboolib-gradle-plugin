@@ -13,8 +13,7 @@ class TabooLibPlugin implements Plugin<Project> {
     void apply(Project project) {
         // 添加仓库
         project.repositories.maven {
-            url project.uri("http://sacredcraft.cn:8081/repository/releases/")
-            allowInsecureProtocol true
+            url project.uri("https://repo.tabooproject.org/repository/releases/")
         }
         project.repositories.maven {
             url project.uri("https://repo.spongepowered.org/maven")
