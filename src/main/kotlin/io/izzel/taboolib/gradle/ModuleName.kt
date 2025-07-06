@@ -77,6 +77,8 @@ val BukkitNMSUtil = arrayOf(
     "bukkit-nms-stable",
     "bukkit-nms-tag",
     "bukkit-nms-tag-12005",
+    "bukkit-nms-tag-12105",
+    "bukkit-nms-tag-12106",
     "bukkit-nms-tag-legacy",
     "bukkit-nms",
 ) + BukkitUtil
