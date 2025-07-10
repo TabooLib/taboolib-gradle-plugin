@@ -34,6 +34,9 @@ class TabooLibExtension {
     /** 分类 */
     String classifier = null
 
+    /** 自定义仓库配置 */
+    Map<String, String> repositories = [:]
+
     /** 排除文件 */
     def exclude(String match) {
         exclude += match
@@ -42,6 +45,11 @@ class TabooLibExtension {
     /** 重定向 */
     def relocate(String pre, String post) {
         relocation[pre] = post
+    }
+
+    /** 添加自定义仓库 */
+    def repository(String name, String url) {
+        repositories[name] = url
     }
 
     /** 描述文件构造器 */

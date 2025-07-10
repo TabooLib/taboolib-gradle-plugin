@@ -11,16 +11,16 @@ class TabooLibPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        // 添加仓库
+        // 注册扩展
+        def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
+        
+        // 添加默认仓库
         project.repositories.maven {
             url project.uri("https://repo.tabooproject.org/repository/releases/")
         }
         project.repositories.maven {
             url project.uri("https://repo.spongepowered.org/maven")
         }
-
-        // 注册扩展
-        def tabooExt = project.extensions.create('taboolib', TabooLibExtension)
         // 注册任务
         def tabooTask = project.tasks.maybeCreate('taboolibMainTask', TabooLibMainTask)
         tabooTask.group = "taboolib"
@@ -47,6 +47,14 @@ class TabooLibPlugin implements Plugin<Project> {
 
         // 添加依赖以及重定向配置
         project.afterEvaluate {
+            // 添加自定义仓库
+            tabooExt.repositories.each { name, url ->
+                project.repositories.maven {
+                    it.name = name
+                    it.url = project.uri(url)
+                }
+            }
+            
             def api = false
             try {
                 project.tasks.taboolibBuildApi.dependsOn(project.tasks.build)
