@@ -24,6 +24,12 @@ class Env {
     /** 启用隔离加载器（完全隔离模式）*/
     boolean enableIsolatedClassloader = false
 
+    /** 非开发者模式下是否在被跳过版本上关闭插件 */
+    boolean disableOnSkippedVersion = true
+
+    /** 非开发者模式下是否在不支持版本上关闭插件 */
+    boolean disableOnUnsupportedVersion = true
+
     /** 安装模块 */
     Set<String> modules = ["common", "common-env", "common-util", "common-legacy-api", "common-platform-api", "common-reflex"]
 
