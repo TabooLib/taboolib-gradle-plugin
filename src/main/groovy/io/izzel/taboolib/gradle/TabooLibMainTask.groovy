@@ -149,6 +149,8 @@ class TabooLibMainTask extends DefaultTask {
                 "file-libs=" + tabooExt.env.fileLibs,
                 "file-assets=" + tabooExt.env.fileAssets,
                 "enable-isolated-classloader=" + tabooExt.env.enableIsolatedClassloader,
+                "disable-on-skipped-version=" + tabooExt.env.disableOnSkippedVersion,
+                "disable-on-unsupported-version=" + tabooExt.env.disableOnUnsupportedVersion,
                 "module=" + modules.join(',')
         ])
         return file.join('\n').getBytes(StandardCharsets.UTF_8)
