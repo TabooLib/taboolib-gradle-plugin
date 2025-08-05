@@ -151,6 +151,7 @@ class TabooLibMainTask extends DefaultTask {
                 "enable-isolated-classloader=" + tabooExt.env.enableIsolatedClassloader,
                 "disable-on-skipped-version=" + tabooExt.env.disableOnSkippedVersion,
                 "disable-on-unsupported-version=" + tabooExt.env.disableOnUnsupportedVersion,
+                "disable-when-primitive-loader-error=" + tabooExt.env.disableWhenPrimitiveLoaderError,
                 "module=" + modules.join(',')
         ])
         return file.join('\n').getBytes(StandardCharsets.UTF_8)

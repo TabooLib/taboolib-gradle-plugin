@@ -30,6 +30,9 @@ class Env {
     /** 非开发者模式下是否在不支持版本上关闭插件 */
     boolean disableOnUnsupportedVersion = true
 
+    /** 在原始加载器初始化失败时是否强制关闭服务器 */
+    boolean disableWhenPrimitiveLoaderError = false
+
     /** 安装模块 */
     Set<String> modules = ["common", "common-env", "common-util", "common-legacy-api", "common-platform-api", "common-reflex"]
 
