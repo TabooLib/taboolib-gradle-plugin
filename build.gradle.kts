@@ -1,10 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     `maven-publish`
     id("groovy")
     id("maven-publish")
     id("java-gradle-plugin")
-    id("com.gradle.plugin-publish") version "0.12.0"
-    kotlin("jvm") version "1.7.10"
+    id("com.gradle.plugin-publish") version "1.3.1"
+    kotlin("jvm") version "2.2.0"
 }
 
 group = "io.izzel.taboolib"
@@ -22,13 +24,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.codehaus.groovy:groovy:3.0.11")
+    compileOnly("org.codehaus.groovy:groovy:3.0.25")
     compileOnly(gradleApi())
     compileOnly(localGroovy())
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
-    "embed"("org.ow2.asm:asm:9.7")
-    "embed"("org.ow2.asm:asm-commons:9.7")
-    "embed"("com.google.code.gson:gson:2.9.0")
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
+    "embed"("org.ow2.asm:asm:9.8")
+    "embed"("org.ow2.asm:asm-commons:9.8")
+    "embed"("com.google.code.gson:gson:2.13.1")
     "embed"(kotlin("stdlib"))
 }
 
@@ -37,19 +39,17 @@ tasks.jar {
     from(configurations.getByName("embed").map { if (it.isDirectory) it else zipTree(it) })
 }
 
-pluginBundle {
+gradlePlugin {
     website = "https://github.com/TabooLib/taboolib-gradle-plugin"
     vcsUrl = "https://github.com/TabooLib/taboolib-gradle-plugin"
-    tags = listOf("taboolib", "bukkit", "minecraft")
-}
 
-gradlePlugin {
     plugins {
         create("taboolib") {
             id = "io.izzel.taboolib"
             displayName = "TabooLib Gradle Plugin"
             description = "TabooLib Gradle Plugin"
             implementationClass = "io.izzel.taboolib.gradle.TabooLibPlugin"
+            tags = listOf("taboolib", "bukkit", "minecraft")
         }
     }
 }
@@ -60,15 +60,19 @@ publishing {
     }
 }
 
+tasks.compileJava {
+    targetCompatibility = "1.8"
+}
+
 tasks.compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
 tasks.compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
