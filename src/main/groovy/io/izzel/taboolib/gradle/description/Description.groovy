@@ -16,6 +16,8 @@ class Description {
 
     def bungeeNodes = new HashMap()
 
+    def hytaleNodes = new HashMap()
+
     String spongeDesc
 
     String name
@@ -33,6 +35,7 @@ class Description {
         bukkitNodes['description'] = desc
         nukkitNodes['description'] = desc
         bungeeNodes['description'] = desc
+        hytaleNodes['Description'] = desc
         spongeDesc = desc
     }
 
@@ -64,5 +67,22 @@ class Description {
 
     def links(Action<? super Links> action) {
         action.execute(lin)
+    }
+
+    // Hytale 特定配置
+    def hytaleGroup(group) {
+        hytaleNodes['Group'] = group
+    }
+
+    def hytaleServerVersion(version) {
+        hytaleNodes['ServerVersion'] = version
+    }
+
+    def hytaleDisabledByDefault(disabled) {
+        hytaleNodes['DisabledByDefault'] = disabled
+    }
+
+    def hytaleIncludesAssetPack(includes) {
+        hytaleNodes['IncludesAssetPack'] = includes
     }
 }

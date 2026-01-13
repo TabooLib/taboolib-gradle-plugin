@@ -260,3 +260,8 @@ val BungeeCord = arrayOf("platform-bungee", "platform-bungee-impl")
  * Velocity 平台
  */
 val Velocity = arrayOf("platform-velocity", "platform-velocity-impl")
+
+/**
+ * Hytale 平台
+ */
+val Hytale = arrayOf("platform-hytale")
