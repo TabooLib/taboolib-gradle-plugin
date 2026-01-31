@@ -31,7 +31,7 @@ const val EXPANSION_COMMAND_HELPER = "minecraft-command-helper"
 const val NMS = "bukkit-nms"
 
 @Deprecated("请使用 BukkitNMSUtil", replaceWith = ReplaceWith("BukkitNMSUtil"))
-val NMS_UTIL = arrayOf("$NMS-legacy", "$NMS-stable", "$NMS-tag", "$NMS-tag-12005", "$NMS-tag-12105", "$NMS-tag-12106", "$NMS-tag-legacy", NMS)
+val NMS_UTIL = arrayOf("$NMS-legacy", "$NMS-stable", "$NMS-tag", "$NMS-tag-12005", "$NMS-tag-12105", "$NMS-tag-12106", "$NMS-tag-legacy", "$NMS-tag-component", NMS)
 
 @Deprecated("请使用 BukkitNMSEntityAI", replaceWith = ReplaceWith("BukkitNMSEntityAI"))
 val AI = arrayOf("bukkit-nms-ai", NMS)
