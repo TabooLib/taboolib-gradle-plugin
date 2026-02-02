@@ -76,11 +76,8 @@ val BukkitNMSUtil = arrayOf(
     "bukkit-nms-legacy",
     "bukkit-nms-stable",
     "bukkit-nms-tag",
-    "bukkit-nms-tag-12005",
-    "bukkit-nms-tag-12105",
-    "bukkit-nms-tag-12106",
+    "bukkit-nms-tag-modern",
     "bukkit-nms-tag-legacy",
-    "bukkit-nms-tag-component",
     "bukkit-nms",
 ) + BukkitUtil
 
@@ -89,11 +86,8 @@ val BukkitNMSUtil = arrayOf(
  */
 val BukkitNMSItemTag = arrayOf(
     "bukkit-nms-tag",
-    "bukkit-nms-tag-12005",
-    "bukkit-nms-tag-12105",
-    "bukkit-nms-tag-12106",
+    "bukkit-nms-tag-modern",
     "bukkit-nms-tag-legacy",
-    "bukkit-nms-tag-component",
     "bukkit-nms",
     "minecraft-chat",
 )
