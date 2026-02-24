@@ -23,7 +23,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.codehaus.groovy:groovy:3.0.11")
     compileOnly(gradleApi())
     compileOnly(localGroovy())
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
@@ -60,13 +59,13 @@ publishing {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_1_8)
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
 

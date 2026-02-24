@@ -7,6 +7,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapperKt
@@ -40,10 +41,10 @@ class TabooLibMainTask extends DefaultTask {
     @Input
     boolean api;
 
-    @Input
+    @Internal
     Project project
 
-    @Input
+    @Internal
     TabooLibExtension tabooExt
 
     @TaskAction
