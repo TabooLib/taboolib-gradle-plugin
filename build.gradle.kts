@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.izzel.taboolib"
-version = "2.0.31"
+version = "2.0.32"
 
 configurations {
     create("embed") {
@@ -27,8 +27,8 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(localGroovy())
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
-    "embed"("org.ow2.asm:asm:9.7")
-    "embed"("org.ow2.asm:asm-commons:9.7")
+    "embed"("org.ow2.asm:asm:9.7.1")
+    "embed"("org.ow2.asm:asm-commons:9.7.1")
     "embed"("com.google.code.gson:gson:2.9.0")
     "embed"(kotlin("stdlib"))
 }
