@@ -50,7 +50,7 @@ class TabooLibPlugin implements Plugin<Project> {
             def api = false
             try {
                 project.tasks.taboolibBuildApi.dependsOn(project.tasks.build)
-                api = project.gradle.startParameter.taskNames.any { it == "taboolibBuildApi" }
+                api = project.gradle.startParameter.taskRequests.args[0][0].toString() == "taboolibBuildApi"
             } catch (Throwable ignored) {
             }
 
@@ -78,9 +78,8 @@ class TabooLibPlugin implements Plugin<Project> {
                 }
             }
 
-            def jarTaskProvider = project.tasks.named('jar', Jar)
-            jarTaskProvider.configure { Jar task ->
-                task.finalizedBy(tabooTask)
+            project.tasks.jar.finalizedBy(tabooTask)
+            project.tasks.jar.configure { Jar task ->
                 task.from(taboo.collect { // 在这里打包 "taboo" 依赖
                     if (it.isDirectory()) {
                         it
@@ -97,10 +96,11 @@ class TabooLibPlugin implements Plugin<Project> {
             }
 
             def kotlinVersion = KotlinPluginWrapperKt.getKotlinPluginVersion(project).replaceAll("[._-]", "")
+            def jarTask = project.tasks.jar as Jar
             tabooTask.configure { TabooLibMainTask task ->
                 task.tabooExt = tabooExt
                 task.project = project
-                task.inJar = task.inJar ?: jarTaskProvider.get().archiveFile.get().asFile
+                task.inJar = task.inJar ?: jarTask.archivePath
                 task.relocations = tabooExt.relocation
                 task.classifier = tabooExt.classifier
                 task.api = api
