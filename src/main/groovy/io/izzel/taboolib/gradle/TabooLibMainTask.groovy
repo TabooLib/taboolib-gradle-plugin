@@ -171,6 +171,7 @@ class TabooLibMainTask extends DefaultTask {
                 "repo-taboolib=" + tabooExt.env.repoTabooLib,
                 "file-libs=" + tabooExt.env.fileLibs,
                 "file-assets=" + tabooExt.env.fileAssets,
+                "enable-legacy-dependency-resolver" + tabooExt.env.enableLegacyDependencyResolver,
                 "enable-isolated-classloader=" + tabooExt.env.enableIsolatedClassloader,
                 "disable-on-skipped-version=" + tabooExt.env.disableOnSkippedVersion,
                 "disable-on-unsupported-version=" + tabooExt.env.disableOnUnsupportedVersion,
