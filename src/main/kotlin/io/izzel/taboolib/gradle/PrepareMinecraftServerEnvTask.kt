@@ -25,7 +25,7 @@ abstract class PrepareMinecraftServerEnvTask : DefaultTask() {
     private val jarNameOrDefault
         get() = jarName.orElse("server.jar")
 
-    @get:InputDirectory
+    @get:Input
     @get:Optional
     @get:Option(option = "serverDirectory", description = "For storing server data.")
     abstract val serverDirectory: DirectoryProperty
