@@ -5,10 +5,14 @@ import io.izzel.taboolib.gradle.description.Builder
 import io.izzel.taboolib.gradle.description.Platforms
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapperKt
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
@@ -23,9 +27,11 @@ import java.util.jar.JarOutputStream
 import java.util.zip.ZipException
 
 @ToString
+@DisableCachingByDefault(because = "Relocates and rewrites jar contents with runtime-dependent metadata.")
 class TabooLibMainTask extends DefaultTask {
 
     @InputFile
+    @PathSensitive(PathSensitivity.NAME_ONLY)
     File inJar
 
     @Input
@@ -38,10 +44,10 @@ class TabooLibMainTask extends DefaultTask {
     @Input
     boolean api;
 
-    @Input
+    @Internal
     Project project
 
-    @Input
+    @Internal
     TabooLibExtension tabooExt
 
     @TaskAction

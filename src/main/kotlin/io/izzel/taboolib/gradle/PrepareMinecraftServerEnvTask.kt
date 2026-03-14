@@ -5,8 +5,10 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.*
 import org.gradle.api.tasks.*
 import org.gradle.api.tasks.options.*
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+@DisableCachingByDefault(because = "Downloads remote server artifacts and writes runtime files.")
 abstract class PrepareMinecraftServerEnvTask : DefaultTask() {
 
     init {
@@ -25,8 +27,7 @@ abstract class PrepareMinecraftServerEnvTask : DefaultTask() {
     private val jarNameOrDefault
         get() = jarName.orElse("server.jar")
 
-    @get:Input
-    @get:Optional
+    @get:OutputDirectory
     @get:Option(option = "serverDirectory", description = "For storing server data.")
     abstract val serverDirectory: DirectoryProperty
 
