@@ -33,6 +33,9 @@ class Env {
     /** 在原始加载器初始化失败时是否强制关闭服务器 */
     boolean disableWhenPrimitiveLoaderError = false
 
+    /** 强制使用旧版依赖处理工具 */
+    boolean enableLegacyDependencyResolver = false
+
     /** 安装模块 */
     Set<String> modules = ["common", "common-env", "common-util", "common-legacy-api", "common-platform-api", "common-reflex"]
 
