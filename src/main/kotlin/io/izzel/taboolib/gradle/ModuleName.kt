@@ -63,6 +63,13 @@ val XSeries = arrayOf(
 )
 
 /**
+ * Incision
+ */
+val Incision = arrayOf(
+    "incision"
+)
+
+/**
  * Bukkit NMS
  */
 val BukkitNMS = arrayOf(
