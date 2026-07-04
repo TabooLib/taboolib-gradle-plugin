@@ -29,8 +29,8 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(localGroovy())
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
-    "embed"("org.ow2.asm:asm:9.7.1")
-    "embed"("org.ow2.asm:asm-commons:9.7.1")
+    "embed"("org.ow2.asm:asm:9.9")
+    "embed"("org.ow2.asm:asm-commons:9.9")
     "embed"("com.google.code.gson:gson:2.9.0")
     "embed"(kotlin("stdlib"))
 }
