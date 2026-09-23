@@ -106,6 +106,7 @@ val BukkitNMSDataSerializer = arrayOf(
     "bukkit-nms-data-serializer",
     "nms-data-serializer-12005",
     "nms-data-serializer-legacy",
+    "nms-data-serializer-26",
     "bukkit-nms"
 )
 
