@@ -4,6 +4,7 @@ import groovy.transform.ToString
 import io.izzel.taboolib.gradle.description.Builder
 import io.izzel.taboolib.gradle.description.Platforms
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Input
@@ -20,7 +21,6 @@ import org.objectweb.asm.commons.ClassRemapper
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.jar.JarEntry
@@ -66,7 +66,6 @@ class TabooLibMainTask extends DefaultTask {
         def index = inJar.name.lastIndexOf('.')
         def name = inJar.name.substring(0, index) + (classifier == null ? "" : "-" + classifier) + inJar.name.substring(index)
         def outJar = new File(inJar.getParentFile(), name)
-        def tempOut1 = File.createTempFile(name, ".jar")
 
         // 并行处理 class 文件
         def nThreads = Runtime.getRuntime().availableProcessors()
@@ -78,6 +77,7 @@ class TabooLibMainTask extends DefaultTask {
             def results = Collections.synchronizedList(new ArrayList<>())
             def readStart = System.currentTimeMillis()
             new JarFile(inJar).withCloseable { jarFile ->
+                def proxyClasses = api ? Collections.emptySet() : NMSProxyPackager.scan(jarFile, tabooExt.exclude, remapper)
                 def entries = Collections.list(jarFile.entries())
                 def futures = new ArrayList<Future>()
                 entries.each { JarEntry jarEntry ->
@@ -99,8 +99,12 @@ class TabooLibMainTask extends DefaultTask {
                             def rem = new ClassRemapper(visitor, threadRemapper)
                             threadRemapper.remapper = rem
                             reader.accept(rem, 0)
+                            def className = path.substring(0, path.length() - '.class'.length())
+                            def relocatedName = threadRemapper.map(className)
+                            def proxy = proxyClasses.contains(className)
+                            def outputPath = proxy ? NMSProxyPackager.PREFIX + relocatedName + '.bin' : threadRemapper.map(path)
                             synchronized (results) {
-                                results.add([name: threadRemapper.map(path), data: writer.toByteArray()])
+                                results.add([name: outputPath, data: writer.toByteArray(), proxyName: proxy ? relocatedName.replace('/', '.') : null])
                             }
                         })
                     } else {
@@ -116,17 +120,35 @@ class TabooLibMainTask extends DefaultTask {
             def asmTime = System.currentTimeMillis() - readStart
             // 串行写入 jar
             def writeStart = System.currentTimeMillis()
-            new JarOutputStream(new FileOutputStream(tempOut1)).withCloseable { out ->
+            def output = new ByteArrayOutputStream()
+            new JarOutputStream(output).withCloseable { out ->
                 def written = new HashSet<String>()
+                def proxyIndex = new TreeSet<String>()
                 results.each { entry ->
+                    if (written.contains(entry.name) && entry.name.startsWith(NMSProxyPackager.PREFIX)) {
+                        throw new GradleException('NMSProxy jar entry conflicts with another entry: ' + entry.name)
+                    }
                     if (written.add(entry.name)) {
                         try {
                             out.putNextEntry(new JarEntry(entry.name as String))
                             out.write(entry.data as byte[])
+                            out.closeEntry()
+                            if (entry.proxyName != null) {
+                                proxyIndex.add(entry.proxyName as String)
+                            }
                         } catch (ZipException ex) {
                             println(ex)
                         }
                     }
+                }
+                if (!proxyIndex.isEmpty()) {
+                    if (written.contains(NMSProxyPackager.INDEX)) {
+                        throw new GradleException('NMSProxy index conflicts with an existing jar entry')
+                    }
+                    out.putNextEntry(new JarEntry(NMSProxyPackager.INDEX))
+                    out.write((proxyIndex.join('\n') + '\n').getBytes(StandardCharsets.UTF_8))
+                    out.closeEntry()
+                    project.logger.lifecycle('Packaged {} NMSProxy classes', proxyIndex.size())
                 }
                 // 描述文件
                 if (!tabooExt.version.skipVersionFile) {
@@ -151,13 +173,13 @@ class TabooLibMainTask extends DefaultTask {
                     }
                 }
             }
+            Files.newOutputStream(outJar.toPath()).withCloseable { output.writeTo(it) }
             def writeTime = System.currentTimeMillis() - writeStart
             def totalTime = System.currentTimeMillis() - totalStart
             println("[taboolibMainTask] ${classCount} classes, ${resourceCount} resources | ASM: ${asmTime}ms (${nThreads} threads), Write: ${writeTime}ms, Total: ${totalTime}ms")
         } finally {
             pool.shutdown()
         }
-        Files.copy(tempOut1.toPath(), outJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
     byte[] buildEnv() {
